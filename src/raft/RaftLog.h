@@ -13,6 +13,7 @@
 
 #include "RaftRpc.h"
 #include "RaftEntry.h"
+#include "RaftSnapshot.h"
 #include "RaftStateMachine.h"
 
 using namespace std;
@@ -24,14 +25,6 @@ namespace raft
 {
 
     enum AppendEntriesStatus { FAILED, SUCCESS };
-
-    enum InstallSnapshotStateName { ILLEGAL_INSTALL_SNAPSHOT_RPC, INSTALLING, INSTALLED };
-
-    struct InstallSnapshotState
-    {
-        InstallSnapshotStateName stateName;
-        set<NodeEndpoint> lastConfig;
-    };
 
 
     /**
@@ -137,13 +130,13 @@ namespace raft
 
 
         // 设置状态机
-        void setStateMachine(StateMachine *stateMachine)
+        void setStateMachine(RaftStateMachine *stateMachine)
         {
 
         }
 
         // 获取状态机
-        StateMachine *getStateMachine()
+        RaftStateMachine *getStateMachine()
         {
 
         }
