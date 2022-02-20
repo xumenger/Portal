@@ -1,3 +1,9 @@
+/*
+ * 2022.02.19 by xumenger
+ * 
+ * 针对Raft 算法定义的核心消息结构
+ * 
+ */
 syntax = "proto3";
 
 
