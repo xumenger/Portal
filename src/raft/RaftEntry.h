@@ -42,7 +42,7 @@ namespace raft
     /**
      * 日志条目
      */
-    struct Entry
+    struct LogEntry
     {
         EntryMeta meta;                 // 日志条目元信息
         unsigned char *commandBytes;    // C++ 中没有byte 类型
