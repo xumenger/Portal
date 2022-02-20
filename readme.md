@@ -6,6 +6,8 @@
 
 ## 相关技术栈和参考
 
+* C++ 语法相关参考
+    * [一篇学会C++！](http://www.xumenger.com/cpp-one-paper-20171230/)
 * Raft 算法参考xRaft
 * Raft 日志条目和日志快照涉及文件IO，参考
     * [https://github.com/xumenger/cDBF](https://github.com/xumenger/cDBF)
