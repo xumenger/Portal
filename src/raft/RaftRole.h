@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-#include "RaftNode.hpp"
+#include "RaftNode.h"
 
 using namespace std;
 
