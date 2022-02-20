@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef PORTAL_RAFT_ROLE_HPP
-#define PORTAL_RAFT_ROLE_HPP
+#ifndef PORTAL_RAFT_ROLE_H
+#define PORTAL_RAFT_ROLE_H
 
 #include <iostream>
 
@@ -32,8 +32,8 @@ namespace raft
         RoleName roleName;      // 角色名称
         int term;               // 任期号
         int votesCount = -1;    // 作为Candidate时，获取多少票数
-        NodeId *votedFor;        // 作为Follower时，投票给谁
-        NodeId *leaderId;        // 领导者Id
+        NodeId *votedFor;       // 作为Follower时，投票给谁
+        NodeId *leaderId;       // 领导者Id
     };
 
 
@@ -70,10 +70,10 @@ namespace raft
             }
 
             // 虚函数：获取LeaderId
-            virtual const NodeId &getLeaderId(NodeId &selfId);
+            virtual const NodeId *getLeaderId();
 
             // 虚函数：获取角色状态
-            virtual const RoleState &getState() = 0;
+            virtual const RoleState *getState() = 0;
 
             // 虚函数：取消定时任务
             virtual void cancelTimeoutOrTask() = 0;
@@ -86,11 +86,13 @@ namespace raft
     class LeaderNodeRole : public AbstractNodeRole
     {
         private:
+            NodeId *leaderId;
+
             // 日志复制任务
-            // LogReplicationTask logReplicationTask;
+            // LogReplicationTask *logReplicationTask;
             //
         public:
-            LeaderNodeRole(int term/*, Logreplicationtask logReplicationtask*/)
+            LeaderNodeRole(int term/*, Logreplicationtask *logReplicationtask*/)
                 : AbstractNodeRole(LEADER, term)
             {
                 //this.logReplicationtask = logReplicationtask;
@@ -100,12 +102,12 @@ namespace raft
             {
             }
 
-            const NodeId &getLeaderId(NodeId &selfId) override
+            const NodeId *getLeaderId() override
             {
-                return selfId;
+                return leaderId;
             }
 
-            const RoleState &getState() override
+            const RoleState *getState() override
             {
                 return null;  // TODO
             }
@@ -148,12 +150,12 @@ namespace raft
                 return this.votesCount;
             }
 
-            const NodeId &getLeaderId(NodeId &selfId) override
+            const NodeId *getLeaderId() override
             {
-                return null;
+                return leaderId;
             }
 
-            const RoleState &getState() override
+            const RoleState *getState() override
             {
                 return null;
             }
@@ -173,11 +175,58 @@ namespace raft
             NodeId *votedFor;                   // 投过票的节点，可能为空
             NodeId *leaderId;                   // 当前leader 节点ID，可能为空
             int preVotesCount;                  //
-            // ElectionTimeout electionTimeout; // 选举超时
+            // ElectionTimeout *electionTimeout; // 选举超时
             long lastHeartbeat;
 
         public:
-            FollowerNodeRole(int term, NodeId)
+            FollowerNodeRole(int term, NodeId *votedFor, int preVotesCount, long lastHeartbeat/*, Electiontimeout *electionTimeout*/)
+                AbstractNodeRole(FOLLOWER, term)
+            {
+                this.votedFor = votedFor;
+                this.leaderId = leaderId;
+                this.preVotesCount = preVotesCount;
+                // this.electionTimeout = electionTimeout;
+                this.lastHeartbeat = lastHeartbeat;
+            }
+
+            virtual ~FollowerNodeRole()
+            {
+            }
+
+            NodeId *getVotedFor()
+            {
+                return this.votedFor;
+            }
+
+            NodeId *getLeaderId()
+            {
+                return this.leaderId;
+            }
+
+            int getPreVotesCount()
+            {
+                return this.preVotesCount;
+            }
+
+            long getLastHeartbeat()
+            {
+                return this.lastHeartbeat;
+            }
+
+            const NodeId *getLeaderId() override
+            {
+                return this.leaderId;
+            }
+           
+            const RoleState *getState() override 
+            {
+                return null;
+            }
+
+            void cancelTimeoutOrTask() override
+            {
+                // TODO
+            }
     };
 
 }

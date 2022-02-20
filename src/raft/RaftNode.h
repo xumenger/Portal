@@ -4,10 +4,13 @@
  * 集群节点相关定义
  *
  */
-#ifndef PORTAL_RAFT_NODE_CPP
-#define PORTAL_RAFT_NODE_CPP
+#ifndef PORTAL_RAFT_NODE_H
+#define PORTAL_RAFT_NODE_H
 
 #include <iostream>
+
+#include <netinet/in.h>
+
 
 using namespace std;
 
@@ -15,6 +18,18 @@ namespace portal
 {
 namespace raft
 {
+
+    /**
+     * 复制状态
+     */
+    struct ReplicatingState
+    {
+        int nextIndex;
+        int matchIndex;
+        bool replicating = false;
+        long lastReplicatedAt = 0;
+    };
+
 
     /**
      * NodeId只是字符串的一个封装
@@ -28,7 +43,7 @@ namespace raft
 
         public:
             // 构造方法
-            NodeId(string v)
+            NodeId(string &v)
             {
                 this.value = v;
             }
@@ -64,6 +79,16 @@ namespace raft
             {
                 return !(this == n);
             }
+    };
+
+
+    /**
+     * 节点终端信息
+     */
+    struct NodeEndpoint
+    {
+        NodeId *id;
+        struct sockaddr_in addr;
     };
 }
 }
