@@ -1,0 +1,18 @@
+server:
+  port: 8881
+
+mybatis:
+  # 配置mapper xml文件所在的路径
+  mapper-locations: classpath:mappers/*Mapper.xml
+  # 配置映射类所在的包名
+  type-aliases-package: com.xum.portal.mybatis.spring.entity
+  # 控制台打印日志（事务、SQL）
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+spring:
+  datasource:
+    username: root
+    password: 
+    url: jdbc:mysql://localhost/testDB
+    driver-class-name: com.mysql.jdbc.Driver
