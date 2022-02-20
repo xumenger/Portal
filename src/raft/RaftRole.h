@@ -170,8 +170,8 @@ namespace raft
     class FollowerNodeRole : public AbstractNodeRole
     {
         private:
-            NodeId votedFor;                    // 投过票的节点，可能为空
-            NodeId leaderId;                    // 当前leader 节点ID，可能为空
+            NodeId *votedFor;                   // 投过票的节点，可能为空
+            NodeId *leaderId;                   // 当前leader 节点ID，可能为空
             int preVotesCount;                  //
             // ElectionTimeout electionTimeout; // 选举超时
             long lastHeartbeat;
