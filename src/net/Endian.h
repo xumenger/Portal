@@ -2,6 +2,7 @@
  * 2022.03.13 
  *
  */
+
 #ifndef PORTAL_NET_ENDIAN_H
 #define PORTAL_NET_ENDIAN_H
 
