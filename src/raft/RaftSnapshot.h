@@ -21,59 +21,61 @@ namespace portal
 namespace raft
 {
 
-    enum AppendEntriesStatus { FAILED, SUCCESS };
 
-    enum InstallSnapshotStateName { ILLEGAL_INSTALL_SNAPSHOT_RPC, INSTALLING, INSTALLED };
+enum AppendEntriesStatus { FAILED, SUCCESS };
 
-    struct InstallSnapshotState
+enum InstallSnapshotStateName { ILLEGAL_INSTALL_SNAPSHOT_RPC, INSTALLING, INSTALLED };
+
+struct InstallSnapshotState
+{
+    InstallSnapshotStateName stateName;
+    set<NodeEndpoint> lastConfig;
+};
+
+
+class SnapshotChunk
+{
+    public:
+        unsigned char *bytes;
+        bool lastChunk;
+
+        SnapshotChunk(unsigned char *bytes, bool lastChunk)
+        {
+            this.bytes = bytes;
+            this.lastChunk = lastChunk;
+        }
+
+        virtual ~SnapshotChunk()
+        {
+
+        }
+};
+
+
+class Snapshot
+{
+    int getLastIncludedIndex()
     {
-        InstallSnapshotStateName stateName;
-        set<NodeEndpoint> lastConfig;
-    };
 
+    }
 
-    class SnapshotChunk
+    int getLastIncludedTerm()
     {
-        public:
-            unsigned char *bytes;
-            bool lastChunk;
 
-            SnapshotChunk(unsigned char *bytes, bool lastChunk)
-            {
-                this.bytes = bytes;
-                this.lastChunk = lastChunk;
-            }
+    }
 
-            virtual ~SnapshotChunk()
-            {
-
-            }
-    };
-
-
-    class Snapshot
+    // 从指定的偏移offset 开始读区指定长度length 的快照区
+    SnapshotChunk *readData(int offset, int length)
     {
-        int getLastIncludedIndex()
-        {
 
-        }
+    }
 
-        int getLastIncludedTerm()
-        {
+    void close()
+    {
 
-        }
+    }
+};
 
-        // 从指定的偏移offset 开始读区指定长度length 的快照区
-        SnapshotChunk *readData(int offset, int length)
-        {
-
-        }
-
-        void close()
-        {
-
-        }
-    };
 
 }
 }

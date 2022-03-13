@@ -20,48 +20,52 @@ namespace portal
 {
 namespace raft
 {
-    class RaftStateMachine
-    {
-        public:
-            int getLastApplied()
-            {
 
-            }
 
-            void applyLog(int index, 
-                          int term, 
-                          unsigned char *commangBytes, 
-                          int firstLogIndex, 
-                          set<NodeEndpoint> lastGroupConfig)
-            {
+class RaftStateMachine
+{
+    public:
+        int getLastApplied()
+        {
 
-            }
+        }
 
-            void advanceLastApplied(int index)
-            {
+        void applyLog(int index, 
+                      int term, 
+                      unsigned char *commangBytes, 
+                      int firstLogIndex, 
+                      set<NodeEndpoint> lastGroupConfig)
+        {
 
-            }
+        }
 
-            void onReadIndexReached(string requestId, int readIndex)
-            {
+        void advanceLastApplied(int index)
+        {
 
-            }
+        }
 
-            void generateSnapshot()
-            {
+        void onReadIndexReached(string requestId, int readIndex)
+        {
 
-            }
+        }
 
-            void applySnapshot(Snapshot snapshot)
-            {
+        void generateSnapshot()
+        {
 
-            }
+        }
 
-            void shutdown()
-            {
+        void applySnapshot(Snapshot snapshot)
+        {
 
-            }
-    };
+        }
+
+        void shutdown()
+        {
+
+        }
+};
+
+
 }
 }
 
