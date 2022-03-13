@@ -1,7 +1,7 @@
-#include "portal/event/network/Acceptor.h"
+#include "./Acceptor.h"
 
-#include "portal/event/network/EventLoop.h"
-#include "portal/event/network/InetAddress.h"
-#include "portal/event/network/SocketOps.h"
+#include "./EventLoop.h"
+#include "./InetAddress.h"
+#include "./SocketOps.h"
 
 #include <boost/bind.hpp>

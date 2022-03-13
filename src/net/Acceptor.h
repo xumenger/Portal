@@ -11,8 +11,8 @@
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 
-#include "portal/event/network/Channel.h"
-#include "portal/event/network/Socket.h"
+#include "./Channel.h"
+#include "./Socket.h"
 
 
 namespace portal
@@ -63,7 +63,7 @@ class Acceptor : boost::noncopyable
 };
 
 
-}
-}
+};
+};
 
 #endif

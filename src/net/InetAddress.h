@@ -10,61 +10,78 @@
 #define PORTAL_NET_INETADDRESS_H
 
 #include <boost/function.hpp>
-#include <boost/noncopyable.hpp>
 
-#include <portal/net/Channel.h>
-#include <portal/net/Socket.h>
+#include "../base/copyable.h"
+
+using namespace std;
 
 
 namespace portal
 {
 namespace net
 {
+namespace sockets
+{
+    const struct sockaddr *sockaddr_cast(const struct sockaddr_in6 *addr);
+};
 
-
-// 头文件中使用了前向声明，大大简化了头文件之间的依赖关系
-// Acceptor.h、Channel.h、Connector.h、TcpConnection.h 都前向声明了EventLoop class
-class EventLoop;
-class InetAddress;
-
-
-// Acceptor of incoming TCP connections.
-// boost::noncopyable 表示不可复制类。不能使用拷贝构造函数、=
-class Acceptor : boost::noncopyable
+class InetAddress : public portal::base::copyable
 {
     public:
-        typedef boost::function<void (int sockfd, const InetAddress&) NewConnectionCallback;
+        // explicit 取消了隐式转换
+        // 给定一个端口构造，主要用在TcpServer listening
+        explicit InetAddress(uint16_t port = 0, bool loopbackOnly = false, bool ipv6 = false);
 
-        // 设置对应的EventLoop、监听的地址/端口
-        Acceptor(EventLoop *loop, const InetAddress &listenAddr, bool reusePort);
-        ~Acceptor();
+        // 给定具体IP、端口的方式构造
+        InetAddress(string ip, uint16_t port, uint16_t port, bool ipv6 = false);
 
-        // 设置收到新TCP 连接后的回调处理函数
-        void setNewConnectionCallback(const NewConnectionCallback &cb)
+        explicit InetAddress(const struct sockaddr_in &addr)
+            : addr_(addr)
+        {  }
+
+        explicit InetAddress(const struct sockaddr_in6 &addr)
+            : addr6_(addr)
+        {  }
+
+        // sa_family_t 协议类型，AF_INET 对应的是TCP
+        sa_family_t family() const
         {
-            newConnectionCallback_ = cb;
+            return addr_.sin_family;
         }
 
-        bool listenning()
+        string toIp() const;
+        string toIpPort() const;
+        uint16_t toPort() const;
+
+
+        const struct sockaddr *getSockAddr() const
         {
-            return listenning_;
+            return sockets::sockaddr_cast(&addr6_);
         }
 
-        void listen();
+        uint32_t ipNetEndian() const;
+        uint16_t portNetEndian() const
+        {
+            return addr_.sin_port;
+        }
+
+        // static 修饰函数时，表明该函数只在同一文件中调用
+        // resolve hostname to IP address, not changing port or sin_family
+        // return true on success.
+        // thread safe
+        static bool resolve(string hostname, InetAddress *result);
 
     private:
-        void handleRead();
-
-        EventLoop *loop_;
-        Socket acceptSocket_;
-        Channel acceptChannel_;
-        NewConnectionCallback newConnectionCallback_;
-        bool listenning_;
-        int idleFd_;
+        union
+        {
+            struct sockaddr_in addr_;
+            struct sockaddr_in6 addr6_;
+        };
 };
 
 
-}
-}
+};
+};
 
 #endif
+
