@@ -12,8 +12,6 @@
 
 namespace portal
 {
-namespace base
-{
 
 using namespace std;
 
@@ -35,7 +33,6 @@ inline To down_cast(From *f)
     return static_cast<To>(f);
 }
 
-};
 };
 
 #endif

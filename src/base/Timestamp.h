@@ -14,8 +14,6 @@
 
 namespace portal
 {
-namespace base
-{
 
 class Timestamp : public portal::base::copyable,
                   public boost::equality_comparable<Timestamp>,
@@ -101,7 +99,6 @@ inline Timestamp addTime(Timestamp timestamp, double seconds)
 }
 
 
-};
 };
 
 #endif

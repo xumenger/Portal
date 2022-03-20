@@ -10,16 +10,12 @@
 
 namespace portal
 {
-namespace base
-{
-
-    
+ 
 class copyable
 {
 };
 
 
-};
 };
 
 
