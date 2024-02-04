@@ -33,9 +33,16 @@
 3. 工作机器上的工作进程
 4. 工作进程内基于so/lua 实现的业务逻辑
 
+
 ## 编译部署
 
-**编译proto**
+**编译Java proto**
+
+```shell
+
+```
+
+**编译C++ proto**
 
 ```shell
 cd ./src/proto/
@@ -59,7 +66,7 @@ protoc -I=./ --cpp\_out=../raft/ ./raftProto.proto
 
 **portal**
 
->以此工程推动研究C++、etcd、Raft、网络编程、epoll、
+>以此工程推动研究C++、etcd、Raft、TCP/IP、网络编程、select、poll、epoll、
 
 * [20240205 - 运行起来Portal Mock]()
 * [2024???? - Portal Raft 协议Protobuf 接口说明]()
@@ -81,7 +88,7 @@ protoc -I=./ --cpp\_out=../raft/ ./raftProto.proto
 
 **worker**
 
->以此工程推动研究C++、Docker、
+>以此工程推动研究C++、Linux、namespace、cgroup、Docker、
 
 * [2024???? - Linux namespace 深究]()
 
