@@ -11,17 +11,17 @@ public class ManageController {
 
     @PostMapping("/create")
     public String Create(@RequestBody CreateParam request){
-	    System.out.println(request.getTaskName());
-	    return "success";
+        System.out.println(request.getTaskName());
+        return "success";
     }
-	
-	
-	/**
+
+
+    /**
      * 使用静态内部类，简单定义一个入参实体类
      */
     static class CreateParam {
-        private String taskName;		// 任务名称
-        private String threadCount;		// 线程数量
+        private String taskName;        // 任务名称
+        private String threadCount;     // 线程数量
 
         public String getTaskName() {
             return taskName;
