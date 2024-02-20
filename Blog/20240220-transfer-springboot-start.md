@@ -22,7 +22,7 @@
       <groupId>com.alibaba</groupId>
       <artifactId>fastjson</artifactId>
       <version>1.2.73</version>
-  </dependency>
+    </dependency>
   </dependencies>
 ```
 
