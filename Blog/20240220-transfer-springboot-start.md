@@ -5,16 +5,6 @@
 在pom.xml 中增加SpringBoot 依赖
 
 ```xml
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.xum</groupId>
-  <artifactId>Transfer</artifactId>
-  <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Transfer Maven Webapp</name>
-  <url>http://maven.apache.org</url>
-  
   <dependencies>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -27,12 +17,13 @@
       <artifactId>spring-boot-starter-web</artifactId>
       <version>1.5.6.RELEASE</version>
     </dependency>
-  </dependencies>
     
-  <build>
-    <finalName>Transfer</finalName>
-  </build>
-</project>
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>fastjson</artifactId>
+      <version>1.2.73</version>
+  </dependency>
+  </dependencies>
 ```
 
 在src/main/resources 下面增加application.yml，内容如下：
@@ -59,7 +50,7 @@ public class TransferApplication {
 }
 ```
 
-增加ManageController
+增加TestController
 
 ```java
 package com.xum.controller;
@@ -69,16 +60,33 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-@RequestMapping("/manage")
-public class ManageController {
+import com.alibaba.fastjson.JSONObject;
 
-    @PostMapping("/create")
+@Controller
+@RequestMapping("/test")
+public class TestController {
+
+    /**
+     * 请求入参是一个实体,并且加上了 @RequestBody
+     * 一般适用于前端Header中Content-Type 为 application/json的场景
+     * 注意入参要是json格式
+     * @param request
+     * @return json
+     * 
+     */
+    @PostMapping("/json")
     public String Create(@RequestBody CreateParam request){
         System.out.println(request.getTaskName());
-        return "success";
+        
+        JSONObject result = new JSONObject();
+        result.put("msg", "ok");
+        result.put("method", "POST");
+        result.put("result", request);
+        
+        System.out.println(result.toJSONString());
+        
+        return result.toJSONString();
     }
-
 
     /**
      * 使用静态内部类，简单定义一个入参实体类
@@ -109,5 +117,26 @@ public class ManageController {
 {
     "taskName": "testTask",
     "threadCount": "222"
+}
+```
+
+## 遗留问题
+
+需要针对一次HTTP请求，深入分析：
+
+1. 在tomcat层面的表现，逐行调试代码
+2. 在Servlet层面的表现
+3. 在TCP层面的表现
+4. 在Spring层面的表现，逐行调试代码
+
+为什么在Postman看到返回值并不是预期结果，而是
+
+```json
+{
+    "timestamp": 1708442742976,
+    "status": 404,
+    "error": "Not Found",
+    "message": "No message available",
+    "path": "/test/json"
 }
 ```

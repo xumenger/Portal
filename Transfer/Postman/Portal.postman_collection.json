@@ -20,7 +20,7 @@
 					}
 				},
 				"url": {
-					"raw": "127.0.0.1:8881/manage/create",
+					"raw": "127.0.0.1:8881/test/json",
 					"host": [
 						"127",
 						"0",
@@ -29,8 +29,8 @@
 					],
 					"port": "8881",
 					"path": [
-						"manage",
-						"create"
+						"test",
+						"json"
 					]
 				}
 			},
