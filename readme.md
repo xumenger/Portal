@@ -4,21 +4,6 @@
 
 使用C、C++、Lua 实现的分布式管理框架
 
-## 相关技术栈和参考
-
-* C++ 语法相关参考
-    * [一篇学会C++！](http://www.xumenger.com/cpp-one-paper-20171230/)
-* Raft 算法参考xRaft
-* Raft 日志条目和日志快照涉及文件IO，参考
-    * [https://github.com/xumenger/cDBF](https://github.com/xumenger/cDBF)
-    * [深入理解DBF文件格式](http://www.xumenger.com/dbf-20160703/)
-* 使用Protobuf 作为通讯协议和序列化工具
-    * [序列化协议Protobuf](http://www.xumenger.com/protobuf-20190525/)
-* 基于epoll 独立实现一个事件驱动的网络库，参考muduo、libevent
-* 基于堆数据结构实现一个定时器组件
-* 支持.so 的扩展方式
-* 支持lua 的扩展方式
-
 
 ## 架构设计
 
