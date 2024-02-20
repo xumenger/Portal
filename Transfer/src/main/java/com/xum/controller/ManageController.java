@@ -12,7 +12,7 @@ public class ManageController {
     @PostMapping("/create")
     public String Create(@RequestBody CreateParam request){
         System.out.println(request.getTaskName());
-        return "success";
+        return "{\"result\": \"success\"}";
     }
 
 

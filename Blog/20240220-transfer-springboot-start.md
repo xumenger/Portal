@@ -1,4 +1,6 @@
-【New Maven projec】->【Create a simpl project (skip archtype selection】
+>搭建一个简单的SpringBoot 项目
+
+首先在Eclipse 中创建一个Maven 项目：【New Maven projec】->【Create a simpl project (skip archtype selection】
 
 在pom.xml 中增加SpringBoot 依赖
 
@@ -33,7 +35,7 @@
 </project>
 ```
 
-在src/main/resources 下面增加application.yml，内容如下
+在src/main/resources 下面增加application.yml，内容如下：
 
 ```yml
 server:
