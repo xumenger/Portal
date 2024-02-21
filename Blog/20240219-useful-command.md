@@ -1,4 +1,14 @@
->一些基础的git 命令操作
+>一些基础的命令操作
+
+## MacOS
+
+```shell
+# 解决VMWare启动虚拟机时报错问题
+sudo launchctl limit maxfiles 10240 10240
+```
+
+
+## git
 
 ```shell
 # 克隆远程仓库

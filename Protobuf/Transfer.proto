@@ -1,0 +1,14 @@
+// 声明proto协议版本
+syntax = "proto3";
+
+package com.xum.portal;
+
+// java类所在的包名
+option java_package = "com.xum.portal";
+// 定义Protobuf自动生成类的类名
+option java_outer_classname = "TransferProto";
+
+message CreateRequest {
+    string task_name = 1;
+    int32 thread_count = 2;
+}

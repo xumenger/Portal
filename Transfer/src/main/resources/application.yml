@@ -1,2 +1,5 @@
 server:
   port: 8881
+portal:
+  ip: 172.16.192.128
+  port: 7777
