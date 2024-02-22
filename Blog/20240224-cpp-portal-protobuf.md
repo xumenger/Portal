@@ -1,5 +1,7 @@
 >Portal 服务端支持与Transfer、Agent 通信
 
+Transfer 和Agent 都会给Portal 发送消息，后续Portal 实现Raft 协议之后，Leader 与Follower 也会进行通信，那么就有一个问题出现了：Portal 怎么知道是谁发过来的什么信息？
+
 ## 编译Protobuf 文件供C++ 使用
 
 ```shell
