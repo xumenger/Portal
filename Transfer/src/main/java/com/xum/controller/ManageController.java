@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.xum.portal.TransferProto.CreateRequest;
+import com.xum.proto.TransferProto.CreateRequest;
 
 @Controller
 @RequestMapping("/manage")

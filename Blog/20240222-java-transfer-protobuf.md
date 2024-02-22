@@ -60,6 +60,29 @@ protoc --version
 </dependency>
 ```
 
+Transfer.proto 代码如下
+
+```proto
+/**
+ * Transfer 与Portal 之间的协议接口定义
+ */
+
+// 声明proto协议版本
+syntax = "proto3";
+
+package com.xum.proto.transfer;
+
+// java类所在的包名
+option java_package = "com.xum.proto";
+// 定义Protobuf自动生成类的类名
+option java_outer_classname = "TransferProto";
+
+message CreateRequest {
+    string task_name = 1;
+    int32 thread_count = 2;
+}
+```
+
 ```shell
 cd Protobuf/
 
@@ -87,7 +110,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.xum.portal.TransferProto.CreateRequest;
+import com.xum.proto.TransferProto.CreateRequest;
 
 @Controller
 @RequestMapping("/manage")
@@ -157,18 +180,10 @@ public class ManageController {
 }
 ```
 
+在application.yml 中增加C++服务端的配置信息如下
 
-## 编译Protobuf 文件供C++ 使用
-
-```shell
-cd Protobuf/
-
-# 编译后生成Transfer.pb.cc、Transfer.pb.h
-protoc -I=./ --cpp_out=../Portal/portal/ Transfer.proto
 ```
-
-编写C++ 服务端程序
-
-```c++
-
+portal:
+  ip: 172.16.192.128
+  port: 7777
 ```

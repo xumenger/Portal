@@ -1,5 +1,11 @@
 >一些基础的命令操作
 
+1. 网络相关的命令有哪些，分别用于排查哪些网络问题
+2. Linux进程相关的命令有哪些，分别用于排查哪些问题
+3. Linux线程相关的命令有哪些，分别用于排查哪些问题
+4. JDK相关的命令有哪些，分别用于排查哪些问题
+
+
 ## MacOS
 
 ```shell
@@ -10,7 +16,7 @@ sudo launchctl limit maxfiles 10240 10240
 protoc -I=./ --java_out=../Transfer/src/main/java/ Transfer.proto
 
 # protobuf 编译为C++ 程序
-protoc -I=./ --cpp_out=../Portal/portal/ Transfer.proto
+protoc -I=./ --cpp_out=../Portal/protobuf/ Transfer.proto
 ```
 
 

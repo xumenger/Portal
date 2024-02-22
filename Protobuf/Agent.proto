@@ -1,0 +1,9 @@
+/**
+ * Agent 与Portal 之间的协议接口定义
+ */
+
+// 声明proto协议版本
+syntax = "proto3";
+
+package com.xum.proto.agent;
+
