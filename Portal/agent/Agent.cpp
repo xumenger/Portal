@@ -44,7 +44,7 @@ int main(int argc, char const *argv[])
 
     struct sockaddr_in server_address;
     bzero(&server_address, sizeof(server_address));
-    servr_address.sin_family = AF_INET;
+    server_address.sin_family = AF_INET;
     inet_pton(AF_INET, portal_ip, &server_address.sin_addr);
     server_address.sin_port = htons(portal_port);
 

@@ -28,6 +28,21 @@ message AgentRegister {
 
 ## 编译Protobuf 文件供C++ 使用
 
+在Ubuntu 上编译安装protobuf
+
+```shell
+tar -xzf protobuf-all-3.13.0.tar.gz
+cd protobuf-3.13.0/
+./configure --prefix=$INSTALL_DIR 
+make 
+make check 
+make install
+
+apt-get install pkg-config
+```
+
+编译Protobuf 文件供C++ 使用，注意，如果是在Ubuntu 上运行，那么需要在Ubuntu 上执行该编译命令，在MacOS 上编译得到的程序无法在Ubuntu 上运行！
+
 ```shell
 cd Protobuf/
 
@@ -38,7 +53,7 @@ protoc -I=./ --cpp_out=../Portal/protobuf/ Agent.proto
 ## 编译运行客户端程序
 
 ```shell
-g++ Portal.cpp -o Portal
+g++ -std=c++11 Agent.cpp ../protobuf/Agent.pb.cc -o Agent `pkg-config --cflags --libs protobuf`
 
 chmod u+x ./Portal
 ./Portal
