@@ -52,9 +52,67 @@ protoc -I=./ --cpp_out=../Portal/protobuf/ Agent.proto
 
 ## 编译运行客户端程序
 
+编写Agent.cpp 程序如下
+
+```c++
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <assert.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
+
+#include "../protobuf/Agent.pb.h"
+
+int main(int argc, char const *argv[])
+{
+    if (argc <= 3) {
+        printf("args params less than 3");
+        return -1;
+    }
+
+    const char *agent_name = argv[1];
+    const char *portal_ip = argv[2];
+    int portal_port = atoi(argv[3]);
+
+    struct sockaddr_in server_address;
+    bzero(&server_address, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    inet_pton(AF_INET, portal_ip, &server_address.sin_addr);
+    server_address.sin_port = htons(portal_port);
+
+    int sockfd = socket(PF_INET, SOCK_STREAM, 0);
+    assert(sockfd >= 0);
+    if (connect(sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
+       printf("connection failed\n");
+    }
+    else {
+        com::xum::proto::agent::AgentRegister reg;
+        reg.set_agent_name(agent_name);
+        reg.set_host_ip("127.0.0.1");
+        
+        char ss[1024];
+        reg.SerializeToArray(ss, 1024);
+
+        if (send(sockfd, ss, strlen(ss) + 1, 0) <= 0) {
+            printf("send error\n");
+        }
+    }
+    close(sockfd);
+
+    return 0;
+}
+```
+
+可以试一下编译运行程序
+
 ```shell
 g++ -std=c++11 Agent.cpp ../protobuf/Agent.pb.cc -o Agent `pkg-config --cflags --libs protobuf`
 
 chmod u+x ./Portal
-./Portal
+
+# 运行会报错，缺少参数
+./Agent
 ```
