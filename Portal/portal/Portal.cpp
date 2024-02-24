@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <cerrno>
 
+#include <iostream>
+
 #include "../protobuf/Portal.pb.h"
 
 
@@ -86,7 +88,7 @@ int main(int argc, char const *argv[])
         com::xum::proto::portal::SetRequest set_req;
         set_req.ParseFromArray(buffer, msg_len);
 
-        printf("value is: %s\n", set_req.value());
+        std::cout << "value is: " << set_req.value() << "\n";
 
         strcpy(buffer, "successful");
         send(connect_fd, buffer, strlen(buffer), 0);
