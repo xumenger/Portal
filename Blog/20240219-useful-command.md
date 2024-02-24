@@ -48,7 +48,7 @@ gdb Portal
 > s
 
 # p 或者print 可以打印某个变量的值
-> p
+> p msg_len
 ```
 
 
