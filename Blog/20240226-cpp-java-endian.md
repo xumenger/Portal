@@ -30,3 +30,15 @@ int len = recv(connect_fd, &test_int, 4, 0);
 
 显然是大端位和小端位的问题导致的，怎么解决这类问题？
 
+由于Java 发送的都是网络字节序（大端位），而C++ 是主机字节序，因此当消息中有整型、浮点型的时候需要使用htonl、htons、ntohl、ntohs 等函数转换一下。对于C/C++程序，send() 发送前使用htonl、htons，将主机字节序转换成网络字节序；recv() 接收之后，调用ntohl、ntohs，将网络字节序转换为主机字节序！对于Java 代码则不需要做处理！
+
+```c++
+#include <arpa/inet.h>
+
+
+int32_t test_int;
+int len = recv(connect_fd, &test_int, 4, 0);
+test_int = ntohl(test_int);
+```
+
+字符串因为是单字节排序的，不需要转换！但需要注意C++ 字符串是以`'/0'` 为结束符的，若找不到`'/0'` 可能会出现一些乱码，因此接收的时候能够分配一个length+1 的buffer 用来接收消息
