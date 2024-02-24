@@ -5,7 +5,6 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <cerrno>
-#include "../protobuf/Transfer.pb.h"
 
 
 #define PORTAL_PORT 7777  // 端口号
