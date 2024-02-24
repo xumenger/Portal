@@ -22,16 +22,123 @@ Transfer 和Agent 都会给Portal 发送消息，后续Portal 实现Raft 协议�
 
 详细可以看下一篇文章！
 
-## 编译Protobuf 文件供C++ 使用
+另外的问题：
 
-```shell
-cd Protobuf/
+1. Kafka 的协议格式是怎么设计的？
+2. Redis 的协议格式是怎么设计的？可以看一下networking.c 下面的readQueryFromClient() 方法的实现细节
 
-# 编译后生成Transfer.pb.cc、Transfer.pb.h
-protoc -I=./ --cpp_out=../Portal/protobuf/ Transfer.proto
+
+## 重新设计协议
+
+之前针对Transfer 与Portal、Portal 与Agent 之间分别设计了协议，这样导致Portal 太过个性化，所以需要重新规划一下协议设计，以及功能划分了！
+
+1. Portal 提供最基础的KV 存储、查询，以及Watch 功能
+2. Transfer 发送给Portal 的消息就是KV
+3. Agent 上报的进程运行情况、服务器信息等也都封装成KV 模式存到Portal
+4. Portal 与Agent 之间通过KV 传输信息，这一层设计为JSON 格式
+5. Portal 完全不感知分布式调度集群的概念，只是管理KV 的基础组件
+
+所以本文的内容会比较多，把原来的内容推翻，重新设计
+
+之前在Portal 里面还定义了针对Transfer、Agent、Worker 的封装，这些全部都废弃，原来的耦合太重了！
+
+
+## Portal 设计
+
+设计两个Proto 文件，一个是对外协议的封装，比如KV、Watch 功能等，命名为Portal.proto；一个是内部集群节点之间Raft 协议的封装，命名为Raft.proto（Raft.proto 本期暂时不涉及，等动后续Raft 开发的时候再深究！）
+
+对外协议的格式如下（参考《分布式一致性算法开发实战》）：
+
+```
+|  类型 |  长度  | payload  |
+| 4byte | 4byte | ??? byte |
 ```
 
-编写C++ 服务端程序
+Portal.proto 定义的内容如下：
+
+```proto
+/**
+ * Portal 对外的服务接口定义
+ */
+
+// 声明proto 协议版本
+syntax = "proto3";
+
+package com.xum.proto.portal;
+
+// java 类所在的包名
+option java_package = "com.xum.proto";
+// 定义Protobuf自动生成类的类名
+option java_outer_classname = "PortalProto";
+
+/**
+ * 消息类型定义
+ */
+enum PortalMessageType {
+    MsgSetReq = 0;
+    MsgSetRsp = 1;
+    MsgGetReq = 2;
+    MsgGetRsp = 3;
+}
+
+
+/**
+ * Key-Value 相关的消息定义
+ */
+message SetRequest {
+    bytes key = 1;
+    bytes value = 2;
+}
+
+message SetResponse {
+    bytes key = 1;
+}
+
+message GetRequest {
+    bytes key = 1;
+}
+
+message GetResponse {
+    bytes key = 1;
+    bytes value = 2;
+}
+```
+
+分别编译为Java 和C++ 文件（编译Protobuf 文件供C++ 使用，注意，如果是在Ubuntu 上运行，那么需要在Ubuntu 上执行该编译命令，在MacOS 上编译得到的程序无法在Ubuntu 上运行！）
+
+```shell
+protoc -I=./ --java_out=../Transfer/src/main/java/ Portal.proto
+
+protoc -I=./ --cpp_out=../Portal/protobuf/ Portal.proto
+```
+
+Portal 的代码简单实现如下
+
+```c++
+
+```
+
+
+## Transfer 设计
+
+将Portal 视为一个存储的节点，把创建Worker、查看Worker 信息、关闭Worker 等功能打包为JSON 格式，然后以KV 的形式发送到Portal
+
+Key 和Value 该怎么设计，这个就是另外一个层面的问题了，需要充分考虑，后续专门写文章总结！
+
+Transfer 的ManageController 的代码简单实现如下
+
+```c++
+
+```
+
+
+## Agent 设计
+
+Agent 监听Transfer 存储到Portal 的比如创建Worker、关闭Worker 的指令信息
+
+另外Agent 也把Worker、集群等运行情况打包为JSON 格式后，再封装为KV 存储到Portal 中
+
+Agent 的代码实现如下（暂时不实现Watch 功能，通过每1s 轮询发起一次Get 获取相关的指令）：
 
 ```c++
 
