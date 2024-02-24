@@ -2,6 +2,26 @@
 
 Transfer 和Agent 都会给Portal 发送消息，后续Portal 实现Raft 协议之后，Leader 与Follower 也会进行通信，那么就有一个问题出现了：Portal 怎么知道是谁发过来的什么信息？
 
+另外我们的协议应该分三层
+
+1. 最底层是Leader、Follower、Candidate 之间数据传输的协议
+2. 再上层是KV 存储、查询等基础功能？
+3. 再上层是进程管理的协议，这个是否需要体现？还是Portal 只提供最基础的存储、查询功能，应用层自己用这个实现
+
+在《分布式一致性算法开发实战》中，其通过设计如下的网络协议解决以上的问题（可以通过类型判断是哪个协议，然后去，关于网络协议的分发处理，可以参考redis、Kafka 的源码实现）：
+
+```
+|  类型 |  长度  | payload  |
+| 4byte | 4byte | ??? byte |
+```
+
+接下来也可以先看一下etcd 是怎么做的！etcd 的启动方法位于server/main.go。
+
+1. etcd 收到客户端的KV 之后，怎么一步步处理转发到Follower 的？
+2. etcd 中大量使用了goroutine 和channel 等GoLang 语法特性，这部分不是很熟！
+
+详细可以看下一篇文章！
+
 ## 编译Protobuf 文件供C++ 使用
 
 ```shell
@@ -41,5 +61,6 @@ gRPC 是基于http2 协议实现的，http2 协议提供了很多新的特性，
 
 接下来的一些决策：
 1. 基于gRPC 的这些特性，接下来需要研究etcd 的源码，不需要太关注网络部分
-2. 对于etcd 更加关注其Raft 设计与实现，底层数据结构等内容
-3. Portal 还是只基于proto3 设计接口，网络部分还是自己实现
+2. etcd 的启动方法位于server/main.go
+3. 对于etcd 更加关注其Raft 设计与实现，底层数据结构等内容
+4. Portal 还是只基于proto3 设计接口，网络部分还是自己实现
