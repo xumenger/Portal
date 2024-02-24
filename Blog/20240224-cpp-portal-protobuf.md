@@ -121,7 +121,7 @@ Portal 的代码简单实现如下
 编译并运行程序
 
 ```shell
-g++ -std=c++11 Agent.cpp ../protobuf/Agent.pb.cc -o Agent `pkg-config --cflags --libs protobuf`
+g++ -std=c++11 Portal.cpp ../protobuf/Portal.pb.cc -o Portal `pkg-config --cflags --libs protobuf`
 
 
 ```

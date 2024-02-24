@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.google.protobuf.ByteString;
 import com.xum.proto.PortalProto.PortalMessageType;
 import com.xum.proto.PortalProto.SetRequest;
 
@@ -44,8 +43,8 @@ public class ManageController {
                 "    \"threadCount\": \"222\"\n" + 
                 "}";
         SetRequest setReq = SetRequest.newBuilder()
-                .setKey(ByteString.copyFrom(key.getBytes()))
-                .setValue(ByteString.copyFrom(value.getBytes()))
+                .setKey(key)
+                .setValue(value)
                 .build();
         byte[] data = setReq.toByteArray();
         

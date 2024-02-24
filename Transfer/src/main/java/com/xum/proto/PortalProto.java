@@ -150,21 +150,34 @@ public final class PortalProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
-    com.google.protobuf.ByteString getKey();
+    java.lang.String getKey();
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
 
     /**
-     * <code>bytes value = 2;</code>
+     * <code>string value = 2;</code>
      * @return The value.
      */
-    com.google.protobuf.ByteString getValue();
+    java.lang.String getValue();
+    /**
+     * <code>string value = 2;</code>
+     * @return The bytes for value.
+     */
+    com.google.protobuf.ByteString
+        getValueBytes();
   }
   /**
    * <pre>
    **
    * Key-Value 相关的消息定义
+   * 使用string 是否存在字符集的问题
    * </pre>
    *
    * Protobuf type {@code com.xum.proto.portal.SetRequest}
@@ -179,8 +192,8 @@ public final class PortalProto {
       super(builder);
     }
     private SetRequest() {
-      key_ = com.google.protobuf.ByteString.EMPTY;
-      value_ = com.google.protobuf.ByteString.EMPTY;
+      key_ = "";
+      value_ = "";
     }
 
     @java.lang.Override
@@ -214,13 +227,15 @@ public final class PortalProto {
               done = true;
               break;
             case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              key_ = input.readBytes();
+              key_ = s;
               break;
             }
             case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              value_ = input.readBytes();
+              value_ = s;
               break;
             }
             default: {
@@ -256,25 +271,79 @@ public final class PortalProto {
     }
 
     public static final int KEY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString key_;
+    private volatile java.lang.Object key_;
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        key_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int VALUE_FIELD_NUMBER = 2;
-    private com.google.protobuf.ByteString value_;
+    private volatile java.lang.Object value_;
     /**
-     * <code>bytes value = 2;</code>
+     * <code>string value = 2;</code>
      * @return The value.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getValue() {
-      return value_;
+    public java.lang.String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        value_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string value = 2;</code>
+     * @return The bytes for value.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -291,11 +360,11 @@ public final class PortalProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!key_.isEmpty()) {
-        output.writeBytes(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
-      if (!value_.isEmpty()) {
-        output.writeBytes(2, value_);
+      if (!getValueBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
       }
       unknownFields.writeTo(output);
     }
@@ -306,13 +375,11 @@ public final class PortalProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!key_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
-      if (!value_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, value_);
+      if (!getValueBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -447,6 +514,7 @@ public final class PortalProto {
      * <pre>
      **
      * Key-Value 相关的消息定义
+     * 使用string 是否存在字符集的问题
      * </pre>
      *
      * Protobuf type {@code com.xum.proto.portal.SetRequest}
@@ -486,9 +554,9 @@ public final class PortalProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        key_ = com.google.protobuf.ByteString.EMPTY;
+        key_ = "";
 
-        value_ = com.google.protobuf.ByteString.EMPTY;
+        value_ = "";
 
         return this;
       }
@@ -566,11 +634,13 @@ public final class PortalProto {
 
       public Builder mergeFrom(com.xum.proto.PortalProto.SetRequest other) {
         if (other == com.xum.proto.PortalProto.SetRequest.getDefaultInstance()) return this;
-        if (other.getKey() != com.google.protobuf.ByteString.EMPTY) {
-          setKey(other.getKey());
+        if (!other.getKey().isEmpty()) {
+          key_ = other.key_;
+          onChanged();
         }
-        if (other.getValue() != com.google.protobuf.ByteString.EMPTY) {
-          setValue(other.getValue());
+        if (!other.getValue().isEmpty()) {
+          value_ = other.value_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -601,21 +671,47 @@ public final class PortalProto {
         return this;
       }
 
-      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object key_ = "";
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return The key.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
+       * @return The bytes for key.
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string key = 1;</code>
        * @param value The key to set.
        * @return This builder for chaining.
        */
-      public Builder setKey(com.google.protobuf.ByteString value) {
+      public Builder setKey(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -625,7 +721,7 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearKey() {
@@ -634,22 +730,64 @@ public final class PortalProto {
         onChanged();
         return this;
       }
-
-      private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string key = 1;</code>
+       * @param value The bytes for key to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object value_ = "";
+      /**
+       * <code>string value = 2;</code>
        * @return The value.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getValue() {
-        return value_;
+      public java.lang.String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string value = 2;</code>
+       * @return The bytes for value.
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes() {
+        java.lang.Object ref = value_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          value_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string value = 2;</code>
        * @param value The value to set.
        * @return This builder for chaining.
        */
-      public Builder setValue(com.google.protobuf.ByteString value) {
+      public Builder setValue(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -659,12 +797,28 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string value = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearValue() {
         
         value_ = getDefaultInstance().getValue();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string value = 2;</code>
+       * @param value The bytes for value to set.
+       * @return This builder for chaining.
+       */
+      public Builder setValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        value_ = value;
         onChanged();
         return this;
       }
@@ -726,10 +880,16 @@ public final class PortalProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
-    com.google.protobuf.ByteString getKey();
+    java.lang.String getKey();
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code com.xum.proto.portal.SetResponse}
@@ -744,7 +904,7 @@ public final class PortalProto {
       super(builder);
     }
     private SetResponse() {
-      key_ = com.google.protobuf.ByteString.EMPTY;
+      key_ = "";
     }
 
     @java.lang.Override
@@ -778,8 +938,9 @@ public final class PortalProto {
               done = true;
               break;
             case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              key_ = input.readBytes();
+              key_ = s;
               break;
             }
             default: {
@@ -815,14 +976,41 @@ public final class PortalProto {
     }
 
     public static final int KEY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString key_;
+    private volatile java.lang.Object key_;
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        key_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -839,8 +1027,8 @@ public final class PortalProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!key_.isEmpty()) {
-        output.writeBytes(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
       unknownFields.writeTo(output);
     }
@@ -851,9 +1039,8 @@ public final class PortalProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!key_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1018,7 +1205,7 @@ public final class PortalProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        key_ = com.google.protobuf.ByteString.EMPTY;
+        key_ = "";
 
         return this;
       }
@@ -1095,8 +1282,9 @@ public final class PortalProto {
 
       public Builder mergeFrom(com.xum.proto.PortalProto.SetResponse other) {
         if (other == com.xum.proto.PortalProto.SetResponse.getDefaultInstance()) return this;
-        if (other.getKey() != com.google.protobuf.ByteString.EMPTY) {
-          setKey(other.getKey());
+        if (!other.getKey().isEmpty()) {
+          key_ = other.key_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1127,21 +1315,47 @@ public final class PortalProto {
         return this;
       }
 
-      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object key_ = "";
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return The key.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
+       * @return The bytes for key.
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string key = 1;</code>
        * @param value The key to set.
        * @return This builder for chaining.
        */
-      public Builder setKey(com.google.protobuf.ByteString value) {
+      public Builder setKey(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1151,12 +1365,28 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearKey() {
         
         key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string key = 1;</code>
+       * @param value The bytes for key to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        key_ = value;
         onChanged();
         return this;
       }
@@ -1218,10 +1448,16 @@ public final class PortalProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
-    com.google.protobuf.ByteString getKey();
+    java.lang.String getKey();
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code com.xum.proto.portal.GetRequest}
@@ -1236,7 +1472,7 @@ public final class PortalProto {
       super(builder);
     }
     private GetRequest() {
-      key_ = com.google.protobuf.ByteString.EMPTY;
+      key_ = "";
     }
 
     @java.lang.Override
@@ -1270,8 +1506,9 @@ public final class PortalProto {
               done = true;
               break;
             case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              key_ = input.readBytes();
+              key_ = s;
               break;
             }
             default: {
@@ -1307,14 +1544,41 @@ public final class PortalProto {
     }
 
     public static final int KEY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString key_;
+    private volatile java.lang.Object key_;
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        key_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1331,8 +1595,8 @@ public final class PortalProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!key_.isEmpty()) {
-        output.writeBytes(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
       unknownFields.writeTo(output);
     }
@@ -1343,9 +1607,8 @@ public final class PortalProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!key_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -1510,7 +1773,7 @@ public final class PortalProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        key_ = com.google.protobuf.ByteString.EMPTY;
+        key_ = "";
 
         return this;
       }
@@ -1587,8 +1850,9 @@ public final class PortalProto {
 
       public Builder mergeFrom(com.xum.proto.PortalProto.GetRequest other) {
         if (other == com.xum.proto.PortalProto.GetRequest.getDefaultInstance()) return this;
-        if (other.getKey() != com.google.protobuf.ByteString.EMPTY) {
-          setKey(other.getKey());
+        if (!other.getKey().isEmpty()) {
+          key_ = other.key_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1619,21 +1883,47 @@ public final class PortalProto {
         return this;
       }
 
-      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object key_ = "";
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return The key.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
+       * @return The bytes for key.
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string key = 1;</code>
        * @param value The key to set.
        * @return This builder for chaining.
        */
-      public Builder setKey(com.google.protobuf.ByteString value) {
+      public Builder setKey(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1643,12 +1933,28 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearKey() {
         
         key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string key = 1;</code>
+       * @param value The bytes for key to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        key_ = value;
         onChanged();
         return this;
       }
@@ -1710,16 +2016,28 @@ public final class PortalProto {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
-    com.google.protobuf.ByteString getKey();
+    java.lang.String getKey();
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
 
     /**
-     * <code>bytes value = 2;</code>
+     * <code>string value = 2;</code>
      * @return The value.
      */
-    com.google.protobuf.ByteString getValue();
+    java.lang.String getValue();
+    /**
+     * <code>string value = 2;</code>
+     * @return The bytes for value.
+     */
+    com.google.protobuf.ByteString
+        getValueBytes();
   }
   /**
    * Protobuf type {@code com.xum.proto.portal.GetResponse}
@@ -1734,8 +2052,8 @@ public final class PortalProto {
       super(builder);
     }
     private GetResponse() {
-      key_ = com.google.protobuf.ByteString.EMPTY;
-      value_ = com.google.protobuf.ByteString.EMPTY;
+      key_ = "";
+      value_ = "";
     }
 
     @java.lang.Override
@@ -1769,13 +2087,15 @@ public final class PortalProto {
               done = true;
               break;
             case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              key_ = input.readBytes();
+              key_ = s;
               break;
             }
             case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
 
-              value_ = input.readBytes();
+              value_ = s;
               break;
             }
             default: {
@@ -1811,25 +2131,79 @@ public final class PortalProto {
     }
 
     public static final int KEY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString key_;
+    private volatile java.lang.Object key_;
     /**
-     * <code>bytes key = 1;</code>
+     * <code>string key = 1;</code>
      * @return The key.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getKey() {
-      return key_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        key_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string key = 1;</code>
+     * @return The bytes for key.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     public static final int VALUE_FIELD_NUMBER = 2;
-    private com.google.protobuf.ByteString value_;
+    private volatile java.lang.Object value_;
     /**
-     * <code>bytes value = 2;</code>
+     * <code>string value = 2;</code>
      * @return The value.
      */
     @java.lang.Override
-    public com.google.protobuf.ByteString getValue() {
-      return value_;
+    public java.lang.String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        value_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string value = 2;</code>
+     * @return The bytes for value.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private byte memoizedIsInitialized = -1;
@@ -1846,11 +2220,11 @@ public final class PortalProto {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!key_.isEmpty()) {
-        output.writeBytes(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, key_);
       }
-      if (!value_.isEmpty()) {
-        output.writeBytes(2, value_);
+      if (!getValueBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, value_);
       }
       unknownFields.writeTo(output);
     }
@@ -1861,13 +2235,11 @@ public final class PortalProto {
       if (size != -1) return size;
 
       size = 0;
-      if (!key_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, key_);
+      if (!getKeyBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, key_);
       }
-      if (!value_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, value_);
+      if (!getValueBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, value_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -2036,9 +2408,9 @@ public final class PortalProto {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        key_ = com.google.protobuf.ByteString.EMPTY;
+        key_ = "";
 
-        value_ = com.google.protobuf.ByteString.EMPTY;
+        value_ = "";
 
         return this;
       }
@@ -2116,11 +2488,13 @@ public final class PortalProto {
 
       public Builder mergeFrom(com.xum.proto.PortalProto.GetResponse other) {
         if (other == com.xum.proto.PortalProto.GetResponse.getDefaultInstance()) return this;
-        if (other.getKey() != com.google.protobuf.ByteString.EMPTY) {
-          setKey(other.getKey());
+        if (!other.getKey().isEmpty()) {
+          key_ = other.key_;
+          onChanged();
         }
-        if (other.getValue() != com.google.protobuf.ByteString.EMPTY) {
-          setValue(other.getValue());
+        if (!other.getValue().isEmpty()) {
+          value_ = other.value_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -2151,21 +2525,47 @@ public final class PortalProto {
         return this;
       }
 
-      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      private java.lang.Object key_ = "";
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return The key.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getKey() {
-        return key_;
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
+       * @return The bytes for key.
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string key = 1;</code>
        * @param value The key to set.
        * @return This builder for chaining.
        */
-      public Builder setKey(com.google.protobuf.ByteString value) {
+      public Builder setKey(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2175,7 +2575,7 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes key = 1;</code>
+       * <code>string key = 1;</code>
        * @return This builder for chaining.
        */
       public Builder clearKey() {
@@ -2184,22 +2584,64 @@ public final class PortalProto {
         onChanged();
         return this;
       }
-
-      private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string key = 1;</code>
+       * @param value The bytes for key to set.
+       * @return This builder for chaining.
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object value_ = "";
+      /**
+       * <code>string value = 2;</code>
        * @return The value.
        */
-      @java.lang.Override
-      public com.google.protobuf.ByteString getValue() {
-        return value_;
+      public java.lang.String getValue() {
+        java.lang.Object ref = value_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          value_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string value = 2;</code>
+       * @return The bytes for value.
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes() {
+        java.lang.Object ref = value_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          value_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string value = 2;</code>
        * @param value The value to set.
        * @return This builder for chaining.
        */
-      public Builder setValue(com.google.protobuf.ByteString value) {
+      public Builder setValue(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2209,12 +2651,28 @@ public final class PortalProto {
         return this;
       }
       /**
-       * <code>bytes value = 2;</code>
+       * <code>string value = 2;</code>
        * @return This builder for chaining.
        */
       public Builder clearValue() {
         
         value_ = getDefaultInstance().getValue();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string value = 2;</code>
+       * @param value The bytes for value to set.
+       * @return This builder for chaining.
+       */
+      public Builder setValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        value_ = value;
         onChanged();
         return this;
       }
@@ -3580,10 +4038,10 @@ public final class PortalProto {
   static {
     java.lang.String[] descriptorData = {
       "\n\014Portal.proto\022\024com.xum.proto.portal\"(\n\n" +
-      "SetRequest\022\013\n\003key\030\001 \001(\014\022\r\n\005value\030\002 \001(\014\"\032" +
-      "\n\013SetResponse\022\013\n\003key\030\001 \001(\014\"\031\n\nGetRequest" +
-      "\022\013\n\003key\030\001 \001(\014\")\n\013GetResponse\022\013\n\003key\030\001 \001(" +
-      "\014\022\r\n\005value\030\002 \001(\014\"\024\n\022WatchCreateRequest\"\024" +
+      "SetRequest\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 \001(\t\"\032" +
+      "\n\013SetResponse\022\013\n\003key\030\001 \001(\t\"\031\n\nGetRequest" +
+      "\022\013\n\003key\030\001 \001(\t\")\n\013GetResponse\022\013\n\003key\030\001 \001(" +
+      "\t\022\r\n\005value\030\002 \001(\t\"\024\n\022WatchCreateRequest\"\024" +
       "\n\022WatchCancelRequest\"\017\n\rWatchResponse*O\n" +
       "\021PortalMessageType\022\r\n\tMsgSetReq\020\000\022\r\n\tMsg" +
       "SetRsp\020\001\022\r\n\tMsgGetReq\020\002\022\r\n\tMsgGetRsp\020\003B\034" +

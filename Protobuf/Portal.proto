@@ -25,23 +25,24 @@ enum PortalMessageType {
 
 /**
  * Key-Value 相关的消息定义
+ * 使用string 是否存在字符集的问题
  */
 message SetRequest {
-    bytes key = 1;
-    bytes value = 2;
+    string key = 1;
+    string value = 2;
 }
 
 message SetResponse {
-    bytes key = 1;
+    string key = 1;
 }
 
 message GetRequest {
-    bytes key = 1;
+    string key = 1;
 }
 
 message GetResponse {
-    bytes key = 1;
-    bytes value = 2;
+    string key = 1;
+    string value = 2;
 }
 
 
