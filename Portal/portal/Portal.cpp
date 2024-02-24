@@ -78,14 +78,15 @@ int main(int argc, char const *argv[])
     while(1) {
         char int_buffer[sizeof(int32_t)];
 
-        com::xum::proto::portal::PortalMessageType msg_type;
+        int32_t msg_type_temp
         int len = recv(connect_fd, &int_buffer, 4, 0);
-        msg_type = *((com::xum::proto::portal::PortalMessageType*)int_buffer);
-        // msg_type = ntohl(msg_type);
+        msg_type_temp = *((int32_t*)int_buffer);
+        msg_type_temp = ntohl(msg_type_temp);
+        com::xum::proto::portal::PortalMessageType type = com::xum::proto::portal::PortalMessageType(msg_type_temp);
 
         int32_t msg_len;
         len = recv(connect_fd, &int_buffer, 4, 0);
-        msg_len = *((int*)int_buffer);
+        msg_len = *((int32_t*)int_buffer);
         msg_len = ntohl(msg_len);
 
         char buffer[msg_len];
