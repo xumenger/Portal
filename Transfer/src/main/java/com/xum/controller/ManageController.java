@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -48,11 +49,20 @@ public class ManageController {
                 .build();
         byte[] data = setReq.toByteArray();
         
+        
+        byte[] type_bytes = ByteBuffer.allocate(Integer.BYTES).putInt(PortalMessageType.MsgSetReq_VALUE).array();
+        
+        System.out.println("data.length: " + data.length);
+        byte[] len_bytes = ByteBuffer.allocate(Integer.BYTES).putInt(data.length).array();
+        
+        byte[] len_bytes_test = ByteBuffer.allocate(Integer.BYTES).putInt(1207959552).array(); 
+        System.out.println("len_bytes_test: " + len_bytes_test);
+        
+        outputStream.write(type_bytes);
+        outputStream.write(len_bytes);
+        
         // 发送数据给服务端（是否存在大小端问题？）
         // 发送消息的时候，需要封装消息类型、长度的逻辑，是否单独封装一个API？
-        // 前两个write是4byte吗？
-        outputStream.write(PortalMessageType.MsgSetReq_VALUE);
-        outputStream.write(data.length);
         outputStream.write(data);
         
         // 读取服务端响应

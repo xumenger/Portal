@@ -20,6 +20,38 @@ protoc -I=./ --cpp_out=../Portal/protobuf/ Transfer.proto
 ```
 
 
+## gdb
+
+首先gcc 或者g++ 编译的时候需要加上-g 参数
+
+```shell
+# 调试某个程序，比如调试Portal 进程
+gdb Portal
+
+# 使用break 或者b 在指定行行增加断点
+> b 79
+
+# 查看断点设置情况
+> info b
+
+# 删除指定断点
+> delete <breakpoint_id>
+
+# 执行run 或者r 启动程序
+> r
+
+# list 或者l 查看当前断点附近的代码
+> l
+
+# n 或者next 步进调试；s 或者step 步入调试
+> n
+> s
+
+# p 或者print 可以打印某个变量的值
+> p
+```
+
+
 ## git
 
 ```shell

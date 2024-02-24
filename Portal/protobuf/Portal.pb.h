@@ -203,7 +203,7 @@ class SetRequest : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
   // accessors -------------------------------------------------------
 
-  // bytes key = 1;
+  // string key = 1;
   void clear_key();
   static const int kKeyFieldNumber = 1;
   const ::std::string& key() const;
@@ -212,12 +212,12 @@ class SetRequest : public ::google::protobuf::Message /* @@protoc_insertion_poin
   void set_key(::std::string&& value);
   #endif
   void set_key(const char* value);
-  void set_key(const void* value, size_t size);
+  void set_key(const char* value, size_t size);
   ::std::string* mutable_key();
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // bytes value = 2;
+  // string value = 2;
   void clear_value();
   static const int kValueFieldNumber = 2;
   const ::std::string& value() const;
@@ -226,7 +226,7 @@ class SetRequest : public ::google::protobuf::Message /* @@protoc_insertion_poin
   void set_value(::std::string&& value);
   #endif
   void set_value(const char* value);
-  void set_value(const void* value, size_t size);
+  void set_value(const char* value, size_t size);
   ::std::string* mutable_value();
   ::std::string* release_value();
   void set_allocated_value(::std::string* value);
@@ -329,7 +329,7 @@ class SetResponse : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes key = 1;
+  // string key = 1;
   void clear_key();
   static const int kKeyFieldNumber = 1;
   const ::std::string& key() const;
@@ -338,7 +338,7 @@ class SetResponse : public ::google::protobuf::Message /* @@protoc_insertion_poi
   void set_key(::std::string&& value);
   #endif
   void set_key(const char* value);
-  void set_key(const void* value, size_t size);
+  void set_key(const char* value, size_t size);
   ::std::string* mutable_key();
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
@@ -440,7 +440,7 @@ class GetRequest : public ::google::protobuf::Message /* @@protoc_insertion_poin
 
   // accessors -------------------------------------------------------
 
-  // bytes key = 1;
+  // string key = 1;
   void clear_key();
   static const int kKeyFieldNumber = 1;
   const ::std::string& key() const;
@@ -449,7 +449,7 @@ class GetRequest : public ::google::protobuf::Message /* @@protoc_insertion_poin
   void set_key(::std::string&& value);
   #endif
   void set_key(const char* value);
-  void set_key(const void* value, size_t size);
+  void set_key(const char* value, size_t size);
   ::std::string* mutable_key();
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
@@ -551,7 +551,7 @@ class GetResponse : public ::google::protobuf::Message /* @@protoc_insertion_poi
 
   // accessors -------------------------------------------------------
 
-  // bytes key = 1;
+  // string key = 1;
   void clear_key();
   static const int kKeyFieldNumber = 1;
   const ::std::string& key() const;
@@ -560,12 +560,12 @@ class GetResponse : public ::google::protobuf::Message /* @@protoc_insertion_poi
   void set_key(::std::string&& value);
   #endif
   void set_key(const char* value);
-  void set_key(const void* value, size_t size);
+  void set_key(const char* value, size_t size);
   ::std::string* mutable_key();
   ::std::string* release_key();
   void set_allocated_key(::std::string* key);
 
-  // bytes value = 2;
+  // string value = 2;
   void clear_value();
   static const int kValueFieldNumber = 2;
   const ::std::string& value() const;
@@ -574,7 +574,7 @@ class GetResponse : public ::google::protobuf::Message /* @@protoc_insertion_poi
   void set_value(::std::string&& value);
   #endif
   void set_value(const char* value);
-  void set_value(const void* value, size_t size);
+  void set_value(const char* value, size_t size);
   ::std::string* mutable_value();
   ::std::string* release_value();
   void set_allocated_value(::std::string* value);
@@ -887,7 +887,7 @@ class WatchResponse : public ::google::protobuf::Message /* @@protoc_insertion_p
 #endif  // __GNUC__
 // SetRequest
 
-// bytes key = 1;
+// string key = 1;
 inline void SetRequest::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -914,7 +914,7 @@ inline void SetRequest::set_key(const char* value) {
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.SetRequest.key)
 }
-inline void SetRequest::set_key(const void* value, size_t size) {
+inline void SetRequest::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
@@ -940,7 +940,7 @@ inline void SetRequest::set_allocated_key(::std::string* key) {
   // @@protoc_insertion_point(field_set_allocated:com.xum.proto.portal.SetRequest.key)
 }
 
-// bytes value = 2;
+// string value = 2;
 inline void SetRequest::clear_value() {
   value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -967,7 +967,7 @@ inline void SetRequest::set_value(const char* value) {
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.SetRequest.value)
 }
-inline void SetRequest::set_value(const void* value, size_t size) {
+inline void SetRequest::set_value(const char* value, size_t size) {
   
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
@@ -997,7 +997,7 @@ inline void SetRequest::set_allocated_value(::std::string* value) {
 
 // SetResponse
 
-// bytes key = 1;
+// string key = 1;
 inline void SetResponse::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1024,7 +1024,7 @@ inline void SetResponse::set_key(const char* value) {
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.SetResponse.key)
 }
-inline void SetResponse::set_key(const void* value, size_t size) {
+inline void SetResponse::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
@@ -1054,7 +1054,7 @@ inline void SetResponse::set_allocated_key(::std::string* key) {
 
 // GetRequest
 
-// bytes key = 1;
+// string key = 1;
 inline void GetRequest::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1081,7 +1081,7 @@ inline void GetRequest::set_key(const char* value) {
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.GetRequest.key)
 }
-inline void GetRequest::set_key(const void* value, size_t size) {
+inline void GetRequest::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
@@ -1111,7 +1111,7 @@ inline void GetRequest::set_allocated_key(::std::string* key) {
 
 // GetResponse
 
-// bytes key = 1;
+// string key = 1;
 inline void GetResponse::clear_key() {
   key_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1138,7 +1138,7 @@ inline void GetResponse::set_key(const char* value) {
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.GetResponse.key)
 }
-inline void GetResponse::set_key(const void* value, size_t size) {
+inline void GetResponse::set_key(const char* value, size_t size) {
   
   key_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
@@ -1164,7 +1164,7 @@ inline void GetResponse::set_allocated_key(::std::string* key) {
   // @@protoc_insertion_point(field_set_allocated:com.xum.proto.portal.GetResponse.key)
 }
 
-// bytes value = 2;
+// string value = 2;
 inline void GetResponse::clear_value() {
   value_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -1191,7 +1191,7 @@ inline void GetResponse::set_value(const char* value) {
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
   // @@protoc_insertion_point(field_set_char:com.xum.proto.portal.GetResponse.value)
 }
-inline void GetResponse::set_value(const void* value, size_t size) {
+inline void GetResponse::set_value(const char* value, size_t size) {
   
   value_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
