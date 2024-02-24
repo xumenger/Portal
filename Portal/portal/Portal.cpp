@@ -79,7 +79,7 @@ int main(int argc, char const *argv[])
         com::xum::proto::portal::PortalMessageType msg_type;
         int len = recv(connect_fd, &msg_type, 4, 0);
 
-        int msg_len;
+        int32 msg_len;
         len = recv(connect_fd, &msg_len, 4, 0);
 
         char buffer[msg_len];
