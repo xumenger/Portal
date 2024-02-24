@@ -64,19 +64,24 @@ int main(int argc, char const *argv[])
         if (send(sockfd, ss, strlen(ss) + 1, 0) <= 0) {
             printf("send error\n");
         }
+
+        // 接收Portal的调度指令：
+        // 1. 启动Worker
+        // 2. 获取当前服务器运行情况
+        // 3. 关闭Worker
     }
     close(sockfd);
 
 
 
-	// 启动后注册到Portal
+    // 启动后注册到Portal
 
-	// 监听Portal，处理任务
-	// 涉及到哪些网络接口？
+    // 监听Portal，处理任务
+    // 涉及到哪些网络接口？
 
-	// 支持so方式fork多线程进程
+    // 支持so方式fork多线程进程
 
-	// 支持lua方式fork多线程进程
+    // 支持lua方式fork多线程进程
 
-	return 0;
+    return 0;
 }
