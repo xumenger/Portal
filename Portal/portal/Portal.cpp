@@ -82,6 +82,8 @@ int main(int argc, char const *argv[])
         int len = recv(connect_fd, &int_buffer, 4, 0);
         msg_type_temp = *((int32_t*)int_buffer);
         msg_type_temp = ntohl(msg_type_temp);
+        // 在c中，enum类型默认是int类型，它们之间可以自动转换
+        // c++编译器支持从enum类型自动转换为int，但反过来是不支持的。需要进行强制转换
         com::xum::proto::portal::PortalMessageType type = com::xum::proto::portal::PortalMessageType(msg_type_temp);
 
         int32_t msg_len;
