@@ -78,7 +78,7 @@ int main(int argc, char const *argv[])
     while(1) {
         char int_buffer[sizeof(int32_t)];
 
-        int32_t msg_type_temp
+        int32_t msg_type_temp;
         int len = recv(connect_fd, &int_buffer, 4, 0);
         msg_type_temp = *((int32_t*)int_buffer);
         msg_type_temp = ntohl(msg_type_temp);
