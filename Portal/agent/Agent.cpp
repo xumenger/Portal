@@ -7,7 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../protobuf/Agent.pb.h"
+#include "../protobuf/Portal.pb.h"
 
 /**
  * 服务器上的代理节点

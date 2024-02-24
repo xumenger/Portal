@@ -6,6 +6,8 @@
 #include <unistd.h>
 #include <cerrno>
 
+#include "../protobuf/Portal.pb.h"
+
 
 #define PORTAL_PORT 7777  // 端口号
 #define BUF_SIZE 1024     // 最大缓存
@@ -56,7 +58,6 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    char buffer[BUF_SIZE];                      // 一次传输的数据缓存
     struct sockaddr_in client_addr;             // 保存客户端地址信息
     socklen_t length = sizeof(client_addr);     // 需要的内存大小
 
@@ -73,11 +74,20 @@ int main(int argc, char const *argv[])
 
     // 数据收发与传输
     while(1) {
-        memset(buffer, 0, sizeof(buffer));
-        int len = recv(connect_fd, buffer, sizeof(buffer), 0);
-        if (strcmp(buffer, "exit\n") == 0 || len <= 0)
-            break;
-        printf("client send message: %s", buffer);
+        com::xum::proto::portal::PortalMessageType msg_type;
+        int len = recv(connect_fd, &msg_type, 4, 0);
+
+        int msg_len;
+        len = recv(connect_fd, &msg_len, 4, 0);
+
+        char buffer[msg_len];
+        len = recv(connect_fd, buffer, msg_len, 0);
+
+        com::xum::proto::portal::SetRequest set_req;
+        set_req.ParseFromArray(buffer, msg_len);
+
+        printf("value is: %s\n", set_req.get_value());
+
         strcpy(buffer, "successful");
         send(connect_fd, buffer, strlen(buffer), 0);
         printf("send message: %s\n", buffer);

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.xum.proto.TransferProto.CreateRequest;
+import com.google.protobuf.ByteString;
+import com.xum.proto.PortalProto.PortalMessageType;
+import com.xum.proto.PortalProto.SetRequest;
 
 @Controller
 @RequestMapping("/manage")
@@ -36,13 +38,22 @@ public class ManageController {
         OutputStream outputStream = clientSocket.getOutputStream();
         
         // 创建请求报文
-        CreateRequest proto = CreateRequest.newBuilder()
-                .setTaskName(request.getTaskName())
-                .setThreadCount(request.getThreadCount())
+        String key = "CreateWorker";
+        String value = "{\n" + 
+                "    \"taskName\": \"testTask\",\n" + 
+                "    \"threadCount\": \"222\"\n" + 
+                "}";
+        SetRequest setReq = SetRequest.newBuilder()
+                .setKey(ByteString.copyFrom(key.getBytes()))
+                .setValue(ByteString.copyFrom(value.getBytes()))
                 .build();
-        byte[] data = proto.toByteArray();
+        byte[] data = setReq.toByteArray();
         
-        // 发送数据给服务端
+        // 发送数据给服务端（是否存在大小端问题？）
+        // 发送消息的时候，需要封装消息类型、长度的逻辑，是否单独封装一个API？
+        // 前两个write是4byte吗？
+        outputStream.write(PortalMessageType.MsgSetReq_VALUE);
+        outputStream.write(data.length);
         outputStream.write(data);
         
         // 读取服务端响应
