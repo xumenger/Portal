@@ -76,11 +76,15 @@ int main(int argc, char const *argv[])
 
     // 数据收发与传输
     while(1) {
+        char int_buffer[sizeof(int_32)];
+
         com::xum::proto::portal::PortalMessageType msg_type;
-        int len = recv(connect_fd, &msg_type, 4, 0);
+        int len = recv(connect_fd, &int_buffer, 4, 0);
+        msg_type = *((com::xum::proto::portal::PortalMessageType*)int_buffer);
 
         int32_t msg_len;
-        len = recv(connect_fd, &msg_len, 4, 0);
+        len = recv(connect_fd, &int_buffer, 4, 0);
+        msg_len = *((int*)int_buffer);
 
         char buffer[msg_len];
         len = recv(connect_fd, buffer, msg_len, 0);
