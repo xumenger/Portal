@@ -86,7 +86,7 @@ int main(int argc, char const *argv[])
         com::xum::proto::portal::SetRequest set_req;
         set_req.ParseFromArray(buffer, msg_len);
 
-        printf("value is: %s\n", set_req.get_value());
+        printf("value is: %s\n", set_req.mutable_value());
 
         strcpy(buffer, "successful");
         send(connect_fd, buffer, strlen(buffer), 0);
