@@ -9,9 +9,10 @@
 #include <assert.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <cerrno>
 
+#include <cerrno>
 #include <iostream>
+#include <map>
 
 #include "../protobuf/Portal.pb.h"
 
@@ -59,7 +60,7 @@ int main(int argc, char const *argv[])
     int port = atoi(argv[2]);
     
     int ret = 0;
-    struct sockadd_in address;
+    struct sockaddr_in address;
     bzero(&address, sizeof(address));
     address.sin_family = AF_INET;
     inet_pton(AF_INET, ip, &address.sin_addr);
@@ -126,7 +127,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
             int connfd = accept(listenfd, (struct sockaddr*)&client_address, &client_addrlength);
             addfd(epollfd, connfd);
         }
-        else if (events[i].event & EPOLLIN) {
+        else if (events[i].events & EPOLLIN) {
             // 只要socket度缓存中还有未读出的数据，这段代码就会被触发
             memset(buf, '\0', BUFFER_SIZE);
             // 返回值分别有哪些可能？
