@@ -79,7 +79,7 @@ int main(int argc, char const *argv[])
     
     const char* ip = "172.16.192.128";
     int port =  7777;
-    
+
     int ret = 0;
     struct sockaddr_in address;
     bzero(&address, sizeof(address));
@@ -172,7 +172,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     buffer_map.erase(it);
                     continue;
                 }
-                else if (ret == 4 - it->second.buffer_readed) {
+                else if (4 == it->second.buffer_readed) {
                     // 获取msg_type
                     int32_t msg_type_temp = *((int32_t*)it->second.msg_type_buffer);
                     msg_type_temp = ntohl(msg_type_temp);
@@ -192,7 +192,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     buffer_map.erase(it);
                     continue;
                 }
-                else if (ret == 8 - it->second.buffer_readed) {
+                else if (8 == it->second.buffer_readed) {
                     // 获取msg_len
                     int32_t msg_len = *((int32_t*)it->second.msg_len_buffer);
                     msg_len = ntohl(msg_len);
