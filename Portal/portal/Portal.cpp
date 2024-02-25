@@ -69,13 +69,16 @@ std::map<int, RequestBuffer> buffer_map;
  */
 int main(int argc, char const *argv[])
 {
-    if (argc <= 2) {
-        printf("usage: %s ip_address port_number\n", basename(argv[0]));
-        return 1;
-    }
+    // if (argc <= 2) {
+    //     printf("usage: %s ip_address port_number\n", basename(argv[0]));
+    //     return 1;
+    // }
 
-    const char* ip = argv[1];
-    int port = atoi(argv[2]);
+    // const char* ip = argv[1];
+    // int port = atoi(argv[2]);
+    
+    const char* ip = "172.16.192.128";
+    int port =  7777;
     
     int ret = 0;
     struct sockaddr_in address;
