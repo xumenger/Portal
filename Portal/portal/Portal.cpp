@@ -165,7 +165,6 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
             // 读取msg_type
             if (it->second.buffer_readed < 4) {
                 ret = recv(sockfd, it->second.msg_type_buffer + it->second.buffer_readed, 4 - it->second.buffer_readed, 0);
-                it->second.buffer_readed += ret;
                 // <0 出错（如果errno==EAGAIN：套接字已标记为非阻塞，而接收操作被阻塞或者接收超时）
                 // =0 连接关闭
                 // >0 接收到数据大小
@@ -180,7 +179,9 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                         continue;
                     }
                 }
-                else if (4 == it->second.buffer_readed) {
+                
+                it->second.buffer_readed += ret;
+                if (4 == it->second.buffer_readed) {
                     // 获取msg_type
                     int32_t msg_type_temp = *((int32_t*)it->second.msg_type_buffer);
                     msg_type_temp = ntohl(msg_type_temp);
@@ -193,7 +194,6 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
             // 读取msg_len
             if (it->second.buffer_readed < 8) {
                 ret = recv(sockfd, it->second.msg_len_buffer + it->second.buffer_readed - 4, 8 - it->second.buffer_readed, 0);
-                it->second.buffer_readed += ret;
                 if (0 == ret) {
                     close(sockfd);
                     // 内存怎么释放？这里面有内存泄漏问题！
@@ -205,7 +205,9 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                         continue;
                     }
                 }
-                else if (8 == it->second.buffer_readed) {
+
+                it->second.buffer_readed += ret;
+                if (8 == it->second.buffer_readed) {
                     // 获取msg_len
                     int32_t msg_len = *((int32_t*)it->second.msg_len_buffer);
                     msg_len = ntohl(msg_len);
