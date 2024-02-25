@@ -54,7 +54,7 @@ int main(int argc, char const *argv[])
        printf("connection failed\n");
     }
     else {
-        com::xum::proto::agent::SetRequest set;
+        com::xum::proto::portal::SetRequest set;
         set.set_key("key");
         set.set_value("value");
        
