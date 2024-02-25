@@ -27,6 +27,24 @@ int setnonblocking(int fd);
 void addfd(int epollfd, int fd);
 void lt(epoll_event *events, int number, int epollfd, int listenfd);
 
+
+struct RequestBuffer {
+    int sock_fd;
+
+    int buffer_readed = 0;
+
+    char msg_type_buffer[sizeof(int32_t)];
+    char msg_len_buffer[sizeof(int32_t)];
+
+    com::xum::proto::portal::PortalMessageType msg_type;
+    int32_t msg_len;
+
+    char *msg_recv_buffer;
+};
+
+std::map<int, RequestBuffer> buffer_map;
+
+
 /**
  * Portal分布式数据节点
  * 作为系统的核心，存储系统元数据信息
@@ -128,13 +146,86 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
             addfd(epollfd, connfd);
         }
         else if (events[i].events & EPOLLIN) {
-            // 只要socket度缓存中还有未读出的数据，这段代码就会被触发
-            memset(buf, '\0', BUFFER_SIZE);
-            // 返回值分别有哪些可能？
-            int ret = recv(sockfd, buf, BUFFER_SIZE-1, 0);
-            if (ret <= 0) {
-                close(sockfd);
-                continue;
+            std::map<int, RequestBuffer>::iterator it = buffer_map.find(sockfd);
+            
+            // 如果没有找到
+            if (it == buffer_map.end()) {
+                // 后续完善内存管理策略
+                RequestBuffer req_buf;
+                buffer_map.insert(std::pair<int, RequestBuffer>(sockfd, req_buf));
+            }
+
+            it = buffer_map.find(sockfd);
+
+            int ret = 0;
+
+            // 读取msg_type
+            if (it->second.buffer_readed < 4) {
+                ret = recv(sockfd, it->second.msg_type_buffer + it->second.buffer_readed, 4 - it->second.buffer_readed, 0);
+                it->second.buffer_readed += ret;
+                if (ret <= 0) {
+                    close(sockfd);
+                    // 内存怎么释放？这里面有内存泄漏问题！
+                    buffer_map.earse(it);
+                    continue;
+                }
+                else if (ret == 4 - it->second.buffer_readed) {
+                    // 获取msg_type
+                    int32_t msg_type_temp = *((int32_t*)it->second.msg_type_buffer);
+                    msg_type_temp = ntohl(msg_type_temp);
+                    // 在c中，enum类型默认是int类型，它们之间可以自动转换
+                    // c++编译器支持从enum类型自动转换为int，但反过来是不支持的。需要进行强制转换
+                    com::xum::proto::portal::PortalMessageType type = com::xum::proto::portal::PortalMessageType(msg_type_temp);
+                    it->second.msg_type = type;
+                }
+            }
+            // 读取msg_len
+            if (it->second.buffer_readed < 8) {
+                ret = recv(sockfd, it->second.msg_len_buffer + it->second.buffer_readed - 4, 8 - it->second.buffer_readed, 0);
+                it->second.buffer_readed += ret;
+                if (ret <= 0) {
+                    close(sockfd);
+                    // 内存怎么释放？这里面有内存泄漏问题！
+                    buffer_map.earse(it);
+                    continue;
+                }
+                else if (ret == 8 - it->second.buffer_readed) {
+                    // 获取msg_len
+                    int32_t msg_len;
+                    int msg_len = *((int32_t*)it->second.msg_len_buffer);
+                    msg_len = ntohl(msg_len);
+                    it->second.msg_len = msg_len;
+
+                    // 存在被攻击的风险，怎么做安全保护？
+                    it->second->msg_recv_buffer = (char * ) malloc(msg_len);
+                }
+            }
+            // 读取请求内容
+            if {
+                ret = recv(sockfd, 
+                           it->second.msg_recv_buffer + (it->second.buffer_readed - 8), 
+                           it->second.msg_len - (it->second.buffer_readed - 8), 
+                           0);
+                if (ret <= 0) {
+                    close(sockfd);
+                    // 内存怎么释放？这里面有内存泄漏问题！
+                    // msg_recv_buffer还没有释放
+                    buffer_map.earse(it);
+                    continue;
+                } else {
+                    it->second.buffer_readed += ret;
+                    if (it->second.buffer_readed - 8 = it->second.msg_len) {
+                        // TODO 根据msg_type 分类处理
+                        com::xum::proto::portal::SetRequest set_req;
+                        set_req.ParseFromArray(buffer, msg_len);
+
+                        std::cout << "value is: " << set_req.value() << "\n";
+
+                        // 内存怎么释放？这里面有内存泄漏问题！
+                        // msg_recv_buffer还没有释放
+                        buffer_map.earse(it);
+                    }
+                }
             }
         }
         else {
