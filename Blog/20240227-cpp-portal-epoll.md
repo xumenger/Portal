@@ -1,3 +1,21 @@
+>Portal 基于epoll 实现IO 多路复用
+
+暂不考虑使用select、poll，直接使用epoll。对于epoll 底层的红黑树实现等原理也暂时不研究；也暂时不参考redis 对epoll 进行进一步封装；也暂时不单独封装一个可用的网络库
+
+主要是在Portal 里面使用epoll 能够先让程序运行起来！以下代码有几个需要特别注意的点：
+
+1. std::map 的内存管理细节没有
+2. 整个程序的内存管理暂时没有深究，这个程序存在内存泄漏问题，后续需要继续优化
+3. 关于recv() 返回值和errno 的判断逻辑需要特别注意
+4. lt() 方法针对TCP 请求包的处理，这里面的代码太多了，需要重构解耦
+5. 本文只是实现recv 的非阻塞处理，对于send 暂时没有，存在缺陷
+6. 在开发的过程中，使用gdb 对程序进行单步调试，理解的效果才很好，调试很重要
+7. 对于epoll 的封装，后续继续参考redis
+8. 针对RequestBuffer 的封装以及buffer 的管理，参考一下redis 是怎么做的！
+9. 目前没有考虑网络安全问题，比如发送过来的报文不合法等
+10. 对于TCP 的状态转移没有深入分析和总结
+
+```c++
 #include <sys/types.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,29 +62,6 @@ struct RequestBuffer {
 
 std::map<int, RequestBuffer> buffer_map;
 
-
-/**
- * Portal分布式数据节点
- * 作为系统的核心，存储系统元数据信息
- * 基于Raft协议实现，保证元数据高可用
- * 
- * 
- * 网络编程参考muduo、redis实现
- * Raft参考etcd实现
-
- * 版本1: 先实现Portal非分布式版本
- *       只有网络通信，数据存储在内存中
- *       实现客户端、Portal、Agent的通信和调度功能
- * 版本2: 实现Raft协议
- * 版本3: 参考etcd实现BTree等存储（可以尝试自己做）
- * 
- * 模块划分：
- * 1. 网络库
- * 2. raft（再细分？）
- * 3. protobuf协议
- * 4. 存储模块
- * 
- */
 int main(int argc, char const *argv[])
 {
     // if (argc <= 2) {
@@ -260,3 +255,4 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
         }
     }
 }
+```
