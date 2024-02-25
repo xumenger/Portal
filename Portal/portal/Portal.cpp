@@ -226,7 +226,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     // 发送怎么做成非阻塞的
                     char buffer[1024];
                     strcpy(buffer, "successful");
-                    send(connect_fd, buffer, strlen(buffer), 0);
+                    send(sockfd, buffer, strlen(buffer), 0);
                     printf("send message: %s\n", buffer);
                 }
             }
