@@ -222,6 +222,12 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     // 内存怎么释放？这里面有内存泄漏问题！
                     // msg_recv_buffer还没有释放
                     buffer_map.erase(it);
+
+                    // 发送怎么做成非阻塞的
+                    char buffer[msg_len];
+                    strcpy(buffer, "successful");
+                    send(connect_fd, buffer, strlen(buffer), 0);
+                    printf("send message: %s\n", buffer);
                 }
             }
         }
