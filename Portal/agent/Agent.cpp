@@ -54,13 +54,13 @@ int main(int argc, char const *argv[])
        printf("connection failed\n");
     }
     else {
-        com::xum::proto::portal::SetRequest set;
-        set.set_key("key");
-        set.set_value("value");
+        com::xum::proto::portal::SetRequest set_req;
+        set_req.set_key("key");
+        set_req.set_value("value");
        
-        int size = set.ByteSize(); 
+        int size = set_req.ByteSize(); 
         char ss[size];
-        set.SerializeToArray(ss, size);
+        set_req.SerializeToArray(ss, size);
 
         if (send(sockfd, ss, size, 0) <= 0) {
             printf("send error\n");
