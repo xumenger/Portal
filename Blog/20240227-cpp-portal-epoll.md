@@ -18,6 +18,15 @@
 * 对于TCP 的状态转移没有深入分析和总结
 * 大量写代码、大量调试才能保持对于技术的敏感度
 * recv() 返回-1，errno除了EAGAIN 还有哪些，分别表示什么意思？
+    * EAGAIN：套接字已标记为非阻塞，而接收操作被阻塞或者接收超时
+    * EBADF：sock不是有效的描述词
+    * ECONNREFUSE：远程主机阻绝网络连接
+    * EFAULT：内存空间访问出错
+    * EINTR：操作被信号中断
+    * EINVAL：参数无效
+    * ENOMEM：内存不足
+    * ENOTCONN：与面向连接关联的套接字尚未被连接上
+    * ENOTSOCK：sock索引的不是套接字
 * 客户端一次发送部分字节是很好的调试Portal 端针对IO 多路复用实现的代码
 * 接下来可以先不参考redis、muduo 的网络库部分，自己独立实现，然后再去对比和他们建模的差距！
 * 对于定时器的实现在当前版本是缺失的
@@ -25,6 +34,8 @@
 * Raft 协议现在是完全没有考虑的，接下来也需要考虑在IO 多路复用的框架下，Raft 怎么实现？
 * 怎么把Reactor 与协议细节分开？现在代码都写到一起了！
 * 现在的代码是C 风格与C++ 风格混在一起的，怎么明确风格？怎么明确区分开？
+* Linux 的常用命令还是没有梳理全！
+* 试想这样的场景，如果发送给某个客户端消息很多，但是客户端一直不接收，那么就一直需要存储在应用端的缓存中，那么就可能因为一个客户端打爆服务端进程，类似的安全问题后续都需要考虑
 
 ```c++
 #include <sys/types.h>
@@ -117,7 +128,7 @@ int main(int argc, char const *argv[])
             break;
         }
 
-        // epoll_wait() 返回值指的是？
+        // epoll_wait() 返回值指的是？是不是事件的数量？
         lt(events, ret, epollfd, listenfd);
     }
 
@@ -256,7 +267,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     // msg_recv_buffer还没有释放
                     buffer_map.erase(it);
 
-                    // 发送怎么做成非阻塞的
+                    // 发送怎么做成非阻塞的？
                     char buffer[1024];
                     strcpy(buffer, "successful");
                     send(sockfd, buffer, strlen(buffer), 0);
