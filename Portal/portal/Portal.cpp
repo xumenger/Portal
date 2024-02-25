@@ -196,34 +196,32 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     it->second.msg_len = msg_len;
 
                     // 存在被攻击的风险，怎么做安全保护？
-                    it->second->msg_recv_buffer = (char * ) malloc(msg_len);
+                    it->second.msg_recv_buffer = (char * ) malloc(msg_len);
                 }
             }
             // 读取请求内容
-            if {
-                ret = recv(sockfd, 
-                           it->second.msg_recv_buffer + (it->second.buffer_readed - 8), 
-                           it->second.msg_len - (it->second.buffer_readed - 8), 
-                           0);
-                if (ret <= 0) {
-                    close(sockfd);
+            ret = recv(sockfd, 
+                       it->second.msg_recv_buffer + (it->second.buffer_readed - 8), 
+                       it->second.msg_len - (it->second.buffer_readed - 8), 
+                       0);
+            if (ret <= 0) {
+                close(sockfd);
+                // 内存怎么释放？这里面有内存泄漏问题！
+                // msg_recv_buffer还没有释放
+                buffer_map.erase(it);
+                continue;
+            } else {
+                it->second.buffer_readed += ret;
+                if (it->second.buffer_readed - 8 = it->second.msg_len) {
+                    // TODO 根据msg_type 分类处理
+                    com::xum::proto::portal::SetRequest set_req;
+                    set_req.ParseFromArray(buffer, msg_len);
+
+                    std::cout << "value is: " << set_req.value() << "\n";
+
                     // 内存怎么释放？这里面有内存泄漏问题！
                     // msg_recv_buffer还没有释放
                     buffer_map.erase(it);
-                    continue;
-                } else {
-                    it->second.buffer_readed += ret;
-                    if (it->second.buffer_readed - 8 = it->second.msg_len) {
-                        // TODO 根据msg_type 分类处理
-                        com::xum::proto::portal::SetRequest set_req;
-                        set_req.ParseFromArray(buffer, msg_len);
-
-                        std::cout << "value is: " << set_req.value() << "\n";
-
-                        // 内存怎么释放？这里面有内存泄漏问题！
-                        // msg_recv_buffer还没有释放
-                        buffer_map.erase(it);
-                    }
                 }
             }
         }
