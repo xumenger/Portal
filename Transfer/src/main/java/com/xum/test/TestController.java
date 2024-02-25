@@ -1,4 +1,4 @@
-package com.xum.controller;
+package com.xum.test;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
