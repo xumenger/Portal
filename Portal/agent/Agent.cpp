@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 
         
         char int_buffer[sizeof(int32_t)];
-        int32_t msg_type = htonl(MsgSetReq);
+        int32_t msg_type = htonl(com::xum::proto::portal::SetRequest::MsgSetReq);
         memcpy(&int_buffer, &msg_type, sizeof(msg_type));
         send(sockfd, int_buffer, 4, 0);
 
