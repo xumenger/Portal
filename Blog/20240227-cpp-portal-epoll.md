@@ -2,7 +2,9 @@
 
 暂不考虑使用select、poll，直接使用epoll。对于epoll 底层的红黑树实现等原理也暂时不研究；也暂时不参考redis 对epoll 进行进一步封装；也暂时不单独封装一个可用的网络库
 
-主要是在Portal 里面使用epoll 能够先让程序运行起来！以下代码有几个需要特别注意的点：
+当前的目标主要是在Portal 里面使用epoll 能够先让程序运行起来！
+
+以下当前代码有几个需要特别注意的点：
 
 * std::map 的内存管理细节没有
 * 整个程序的内存管理暂时没有深究，这个程序存在内存泄漏问题，后续需要继续优化
@@ -20,6 +22,9 @@
 * 接下来可以先不参考redis、muduo 的网络库部分，自己独立实现，然后再去对比和他们建模的差距！
 * 对于定时器的实现在当前版本是缺失的
 * 更进一步的，K8s 集群中怎么利用etcd 做集群的管理的？KV 是怎么设计的？
+* Raft 协议现在是完全没有考虑的，接下来也需要考虑在IO 多路复用的框架下，Raft 怎么实现？
+* 怎么把Reactor 与协议细节分开？现在代码都写到一起了！
+* 现在的代码是C 风格与C++ 风格混在一起的，怎么明确风格？怎么明确区分开？
 
 ```c++
 #include <sys/types.h>
@@ -34,6 +39,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 
+// 这些是C++的内容
 #include <cerrno>
 #include <iostream>
 #include <map>
@@ -52,6 +58,7 @@ void addfd(int epollfd, int fd);
 void lt(epoll_event *events, int number, int epollfd, int listenfd);
 
 
+// 设计用于保存请求上下文信息
 struct RequestBuffer {
     int sock_fd;
 
@@ -66,6 +73,7 @@ struct RequestBuffer {
     char *msg_recv_buffer;
 };
 
+// map 的使用细节还未深究！
 std::map<int, RequestBuffer> buffer_map;
 
 int main(int argc, char const *argv[])
@@ -109,7 +117,7 @@ int main(int argc, char const *argv[])
             break;
         }
 
-        // ret返回值指的是？
+        // epoll_wait() 返回值指的是？
         lt(events, ret, epollfd, listenfd);
     }
 
