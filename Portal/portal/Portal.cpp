@@ -212,10 +212,10 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                 continue;
             } else {
                 it->second.buffer_readed += ret;
-                if (it->second.buffer_readed - 8 = it->second.msg_len) {
+                if (it->second.buffer_readed - 8 == it->second.msg_len) {
                     // TODO 根据msg_type 分类处理
                     com::xum::proto::portal::SetRequest set_req;
-                    set_req.ParseFromArray(buffer, msg_len);
+                    set_req.ParseFromArray(it->second.msg_recv_buffer, it->second.msg_len);
 
                     std::cout << "value is: " << set_req.value() << "\n";
 
