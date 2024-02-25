@@ -224,7 +224,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     buffer_map.erase(it);
 
                     // 发送怎么做成非阻塞的
-                    char buffer[msg_len];
+                    char buffer[1024];
                     strcpy(buffer, "successful");
                     send(connect_fd, buffer, strlen(buffer), 0);
                     printf("send message: %s\n", buffer);
