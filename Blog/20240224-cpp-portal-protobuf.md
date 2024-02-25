@@ -86,21 +86,21 @@ enum PortalMessageType {
  * Key-Value 相关的消息定义
  */
 message SetRequest {
-    bytes key = 1;
-    bytes value = 2;
+    string key = 1;
+    string value = 2;
 }
 
 message SetResponse {
-    bytes key = 1;
+    string key = 1;
 }
 
 message GetRequest {
-    bytes key = 1;
+    string key = 1;
 }
 
 message GetResponse {
-    bytes key = 1;
-    bytes value = 2;
+    string key = 1;
+    string value = 2;
 }
 ```
 
@@ -115,7 +115,95 @@ protoc -I=./ --cpp_out=../Portal/protobuf/ Portal.proto
 Portal 的代码简单实现如下
 
 ```c++
+#include <stdio.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <cerrno>
 
+#include <iostream>
+
+#include "../protobuf/Portal.pb.h"
+
+
+#define PORTAL_PORT 7777  // 端口号
+#define BUF_SIZE 1024     // 最大缓存
+#define MAX_QUEUE 20      // 最大连接数 
+
+int main(int argc, char const *argv[])
+{
+    int server_sockfd = socket(AF_INET, SOCK_STREAM, 0);
+
+    struct sockaddr_in server_sockaddr;                 // 保存本地地址信息
+    server_sockaddr.sin_family = AF_INET;               // 采用ipv4
+    server_sockaddr.sin_port = htons(PORTAL_PORT);      // 指定端口
+    server_sockaddr.sin_addr.s_addr = htonl(INADDR_ANY);// 获取主机接收的所有响应
+
+    // 绑定本地IP与端口
+    if (bind(server_sockfd, (struct sockaddr *)&server_sockaddr, sizeof(server_sockaddr)) == -1) {
+        perror("Bind Failuer\n");
+        printf("Error: %s\n", strerror(errno));     // 输出错误信息
+        return -1;
+    }
+
+    // 设置监听状态
+    printf ("Listen Port: %d\n", PORTAL_PORT);
+    if (listen(server_sockfd, MAX_QUEUE) == -1) {
+        perror("Listen Error\n");
+        return -1;
+    }
+
+    struct sockaddr_in client_addr;             // 保存客户端地址信息
+    socklen_t length = sizeof(client_addr);     // 需要的内存大小
+
+    printf("Waiting for connection!\n");
+
+    // 等待连接，返回服务器端建立连接的socket
+    int connect_fd = accept(server_sockfd, (struct sockaddr *)&client_addr, &length);
+    if (-1 == connect_fd) {
+        perror("Connect Error\n");
+        return -1;
+    }
+
+    printf("Connection Successful\n");
+
+    // 数据收发与传输
+    while(1) {
+        char int_buffer[sizeof(int32_t)];
+
+        int32_t msg_type_temp;
+        int len = recv(connect_fd, &int_buffer, 4, 0);
+        msg_type_temp = *((int32_t*)int_buffer);
+        msg_type_temp = ntohl(msg_type_temp);
+        // 在c中，enum类型默认是int类型，它们之间可以自动转换
+        // c++编译器支持从enum类型自动转换为int，但反过来是不支持的。需要进行强制转换
+        com::xum::proto::portal::PortalMessageType type = com::xum::proto::portal::PortalMessageType(msg_type_temp);
+
+        int32_t msg_len;
+        len = recv(connect_fd, &int_buffer, 4, 0);
+        msg_len = *((int32_t*)int_buffer);
+        msg_len = ntohl(msg_len);
+
+        char buffer[msg_len];
+        len = recv(connect_fd, buffer, msg_len, 0);
+
+        com::xum::proto::portal::SetRequest set_req;
+        set_req.ParseFromArray(buffer, msg_len);
+
+        std::cout << "value is: " << set_req.value() << "\n";
+
+        strcpy(buffer, "successful");
+        send(connect_fd, buffer, strlen(buffer), 0);
+        printf("send message: %s\n", buffer);
+    }
+
+    close(connect_fd);
+    close(server_sockfd);
+
+    return 0;
+}
 ```
 
 编译并运行程序
@@ -123,7 +211,7 @@ Portal 的代码简单实现如下
 ```shell
 g++ -std=c++11 Portal.cpp ../protobuf/Portal.pb.cc -o Portal `pkg-config --cflags --libs protobuf`
 
-
+./Portal
 ```
 
 
@@ -136,7 +224,108 @@ Key 和Value 该怎么设计，这个就是另外一个层面的问题了，需�
 Transfer 的ManageController 的代码简单实现如下
 
 ```c++
+package com.xum.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.xum.proto.PortalProto.PortalMessageType;
+import com.xum.proto.PortalProto.SetRequest;
+
+@Controller
+@RequestMapping("/manage")
+public class ManageController {
+    
+    @Value("${portal.ip}")
+    String gPortalIP;
+    
+    @Value("${portal.port}")
+    int gPortalPort;
+    
+
+    @PostMapping("/create")
+    public String Create(@RequestBody CreateParam request) throws UnknownHostException, IOException{
+        
+        // 创建TCP客户端
+        Socket clientSocket = new Socket(gPortalIP, gPortalPort);
+        
+        // 创建输入流和输出流
+        InputStream inputStream = clientSocket.getInputStream();
+        OutputStream outputStream = clientSocket.getOutputStream();
+        
+        // 创建请求报文
+        String key = "CreateWorker";
+        String value = "{\n" + 
+                "    \"taskName\": \"testTask\",\n" + 
+                "    \"threadCount\": \"222\"\n" + 
+                "}";
+        SetRequest setReq = SetRequest.newBuilder()
+                .setKey(key)
+                .setValue(value)
+                .build();
+        byte[] data = setReq.toByteArray();
+        
+        
+        byte[] type_bytes = ByteBuffer.allocate(Integer.BYTES).putInt(PortalMessageType.MsgSetReq_VALUE).array();
+        
+        System.out.println("data.length: " + data.length);
+        byte[] len_bytes = ByteBuffer.allocate(Integer.BYTES).putInt(data.length).array();
+        
+        byte[] len_bytes_test = ByteBuffer.allocate(Integer.BYTES).putInt(1207959552).array(); 
+        System.out.println("len_bytes_test: " + len_bytes_test);
+        
+        outputStream.write(type_bytes);
+        outputStream.write(len_bytes);
+        
+        // 发送数据给服务端（是否存在大小端问题？）
+        // 发送消息的时候，需要封装消息类型、长度的逻辑，是否单独封装一个API？
+        outputStream.write(data);
+        
+        // 读取服务端响应
+        byte[] response = new byte[1024];
+        int bytesRead = inputStream.read(response);
+        String receivedMessage = new String(response, 0, bytesRead);
+        System.out.println("收到服务器响应：" + receivedMessage);
+        
+        // 关闭连接
+        clientSocket.close();
+        
+        return "success";
+    }
+    
+    
+    /**
+     * 使用静态内部类，简单定义一个入参实体类
+     */
+    static class CreateParam {
+        private String taskName;        // 任务名称
+        private Integer threadCount;     // 线程数量
+
+        public String getTaskName() {
+            return taskName;
+        }
+        public void setTaskName(String taskName) {
+            this.taskName = taskName;
+        }
+        public Integer getThreadCount() {
+            return threadCount;
+        }
+        public void setThreadCount(Integer threadCount) {
+            this.threadCount = threadCount;
+        }
+    }
+    
+}
 ```
 
 
@@ -146,10 +335,77 @@ Agent 监听Transfer 存储到Portal 的比如创建Worker、关闭Worker 的指
 
 另外Agent 也把Worker、集群等运行情况打包为JSON 格式后，再封装为KV 存储到Portal 中
 
-Agent 的代码实现如下（暂时不实现Watch 功能，通过每1s 轮询发起一次Get 获取相关的指令）：
+Agent 的代码实现如下（可以暂时不实现Watch 功能，通过每1s 轮询发起一次Get 获取相关的指令）：
 
 ```c++
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <assert.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
+#include "../protobuf/Portal.pb.h"
+
+int main(int argc, char const *argv[])
+{
+    if (argc <= 3) {
+        printf("args params less than 3");
+        return -1;
+    }
+
+    const char *agent_name = argv[1];
+    const char *portal_ip = argv[2];
+    int portal_port = atoi(argv[3]);
+
+    struct sockaddr_in server_address;
+    bzero(&server_address, sizeof(server_address));
+    server_address.sin_family = AF_INET;
+    inet_pton(AF_INET, portal_ip, &server_address.sin_addr);
+    server_address.sin_port = htons(portal_port);
+
+    int sockfd = socket(PF_INET, SOCK_STREAM, 0);
+    assert(sockfd >= 0);
+    if (connect(sockfd, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
+       printf("connection failed\n");
+    }
+    else {
+        com::xum::proto::portal::SetRequest set_req;
+        set_req.set_key("key");
+        set_req.set_value("value");
+       
+        int size = set_req.ByteSize(); 
+        char ss[size];
+        set_req.SerializeToArray(ss, size);
+
+        
+        char int_buffer[sizeof(int32_t)];
+        int32_t msg_type = htonl(com::xum::proto::portal::MsgSetReq);
+        memcpy(&int_buffer, &msg_type, sizeof(msg_type));
+        send(sockfd, int_buffer, 4, 0);
+
+        int32_t msg_len = htonl(size);
+        memcpy(&int_buffer, &msg_len, sizeof(msg_len));
+        send(sockfd, int_buffer, 4, 0);
+
+        if (send(sockfd, ss, size, 0) <= 0) {
+            printf("send error\n");
+        }
+    }
+    close(sockfd);
+
+    return 0;
+}
+```
+
+编译运行代理客户端程序
+
+```shell
+g++ -std=c++11 Agent.cpp ../protobuf/Portal.pb.cc -o Agent `pkg-config --cflags --libs protobuf`
+
+./Agent test_agent 172.16.192.128 7777
 ```
 
 

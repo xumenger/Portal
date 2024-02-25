@@ -20,6 +20,15 @@ protoc -I=./ --cpp_out=../Portal/protobuf/ Transfer.proto
 ```
 
 
+## g++
+
+```shell
+# 编译使用到Protobuf
+g++ -std=c++11 Agent.cpp ../protobuf/Portal.pb.cc -o Agent `pkg-config --cflags --libs protobuf`
+g++ -std=c++11 Portal.cpp ../protobuf/Portal.pb.cc -o Portal `pkg-config --cflags --libs protobuf`
+```
+
+
 ## gdb
 
 首先gcc 或者g++ 编译的时候需要加上-g 参数
