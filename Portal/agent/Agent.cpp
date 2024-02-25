@@ -62,6 +62,16 @@ int main(int argc, char const *argv[])
         char ss[size];
         set_req.SerializeToArray(ss, size);
 
+        
+        char int_buffer[sizeof(int32_t)];
+        int32_t msg_type = htonl(MsgSetReq);
+        memcpy(&int_buffer, &msg_type, sizeof(msg_type));
+        send(sockfd, int_buffer, 4, 0);
+
+        int32_t msg_len = htonl(size);
+        memcpy(&int_buffer, &msg_len, sizeof(msg_len));
+        send(sockfd, int_buffer, 4, 0);
+
         if (send(sockfd, ss, size, 0) <= 0) {
             printf("send error\n");
         }
