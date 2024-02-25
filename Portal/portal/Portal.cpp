@@ -191,8 +191,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                 }
                 else if (ret == 8 - it->second.buffer_readed) {
                     // 获取msg_len
-                    int32_t msg_len;
-                    int msg_len = *((int32_t*)it->second.msg_len_buffer);
+                    int32_t msg_len = *((int32_t*)it->second.msg_len_buffer);
                     msg_len = ntohl(msg_len);
                     it->second.msg_len = msg_len;
 
