@@ -2,7 +2,7 @@
 
 * Protobuf 与json 对比：序列化与反序列化速度、序列化后字节大小对比……
 * GRPC 与Protobuf 的关系是什么？
-* InnoDB 的索引分裂怎么复线，怎么从索引文件层面进行分析？
+* InnoDB 的索引分裂怎么复现，怎么从索引文件层面进行分析？
 * PostgreSQL 相比于InnoDB，在技术底层上有哪些异同点？
 * 怎么规定Portal 的编码风格？
 * 怎么为Portal 设计单元测试？
@@ -12,3 +12,4 @@
 * Raft 模块是参考xRaft 做的比较简洁，还是参考etcd 做的比较复杂？
 * 针对tomcat 的特性，设计哪些实验？
 * 针对SpringBoot 的特性，设计哪些实验？
+* 基于Transfer 工程，对于jdbc 的协议细节好好研究一下
