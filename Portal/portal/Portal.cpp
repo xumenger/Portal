@@ -166,7 +166,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                 if (ret <= 0) {
                     close(sockfd);
                     // 内存怎么释放？这里面有内存泄漏问题！
-                    buffer_map.earse(it);
+                    buffer_map.erase(it);
                     continue;
                 }
                 else if (ret == 4 - it->second.buffer_readed) {
@@ -186,7 +186,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                 if (ret <= 0) {
                     close(sockfd);
                     // 内存怎么释放？这里面有内存泄漏问题！
-                    buffer_map.earse(it);
+                    buffer_map.erase(it);
                     continue;
                 }
                 else if (ret == 8 - it->second.buffer_readed) {
@@ -210,7 +210,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                     close(sockfd);
                     // 内存怎么释放？这里面有内存泄漏问题！
                     // msg_recv_buffer还没有释放
-                    buffer_map.earse(it);
+                    buffer_map.erase(it);
                     continue;
                 } else {
                     it->second.buffer_readed += ret;
@@ -223,7 +223,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
 
                         // 内存怎么释放？这里面有内存泄漏问题！
                         // msg_recv_buffer还没有释放
-                        buffer_map.earse(it);
+                        buffer_map.erase(it);
                     }
                 }
             }
