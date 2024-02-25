@@ -54,14 +54,15 @@ int main(int argc, char const *argv[])
        printf("connection failed\n");
     }
     else {
-        com::xum::proto::agent::AgentRegister reg;
-        reg.set_agent_name(agent_name);
-        reg.set_host_ip("127.0.0.1");
-        
-        char ss[1024];
-        reg.SerializeToArray(ss, 1024);
+        com::xum::proto::agent::SetRequest set;
+        set.set_key("key");
+        set.set_value("value");
+       
+        int size = set.ByteSize(); 
+        char ss[size];
+        set.SerializeToArray(ss, size);
 
-        if (send(sockfd, ss, strlen(ss) + 1, 0) <= 0) {
+        if (send(sockfd, ss, size, 0) <= 0) {
             printf("send error\n");
         }
 
