@@ -11,7 +11,12 @@
 ```shell
 # 解决VMWare启动虚拟机时报错问题
 sudo launchctl limit maxfiles 10240 10240
+```
 
+
+## proto
+
+```shell
 # protobuf 编译为Java 程序
 protoc -I=./ --java_out=../Transfer/src/main/java/ Transfer.proto
 
