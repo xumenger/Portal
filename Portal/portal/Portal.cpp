@@ -284,8 +284,8 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                             } else {
                                 // 发送应答（这部分怎么封装、解耦）
                                 com::xum::proto::portal::GetResponse get_rsp;
-                                get_rsp.set_key(kv_it.first());
-                                get_rsp.set_value(kv_it.second());
+                                get_rsp.set_key(kv_it->first());
+                                get_rsp.set_value(kv_it->second());
                                
                                 int size = get_rsp.ByteSize(); 
                                 char ss[size];
@@ -298,7 +298,7 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
 
                                 int32_t msg_len = htonl(size);
                                 memcpy(&int_buffer, &msg_len, sizeof(msg_len));
-                                
+
                                 send(sockfd, int_buffer, 4, 0);
 
                                 if (send(sockfd, ss, size, 0) <= 0) {
