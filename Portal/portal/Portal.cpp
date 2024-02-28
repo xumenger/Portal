@@ -43,6 +43,7 @@ struct RequestBuffer {
 };
 
 std::map<int, RequestBuffer> buffer_map;
+std::map<std::string, std::string> kv_map;
 
 
 /**
@@ -237,12 +238,80 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
             else {
                 it->second.buffer_readed += ret;
                 if (it->second.buffer_readed - 8 == it->second.msg_len) {
-                    // TODO 根据msg_type 分类处理
-                    com::xum::proto::portal::SetRequest set_req;
-                    set_req.ParseFromArray(it->second.msg_recv_buffer, it->second.msg_len);
 
-                    std::cout << "value is: " << set_req.value() << "\n";
+                    switch (it->second.msg_type) {
+                        case com::xum::proto::portal::MsgSetReq: {
+                            com::xum::proto::portal::SetRequest set_req;
+                            set_req.ParseFromArray(it->second.msg_recv_buffer, it->second.msg_len);
 
+                            // 存储到内存
+                            kv_map.insert(std::pair<std::string, std::string>(set_req.key(), set_req.value()));
+
+                            // 发送应答（这部分怎么封装、解耦）
+                            com::xum::proto::portal::SetResponse set_rsp;
+                            set_rsp.set_key(set_req.key());
+                           
+                            int size = set_rsp.ByteSize(); 
+                            char ss[size];
+                            set_rsp.SerializeToArray(ss, size);
+
+                            char int_buffer[sizeof(int32_t)];
+                            int32_t msg_type = htonl(com::xum::proto::portal::MsgSetRsp);
+                            memcpy(&int_buffer, &msg_type, sizeof(msg_type));
+                            send(sockfd, int_buffer, 4, 0);
+
+                            int32_t msg_len = htonl(size);
+                            memcpy(&int_buffer, &msg_len, sizeof(msg_len));
+
+                            // 这些send也是非阻塞的，需要考虑怎么封装优化？
+                            send(sockfd, int_buffer, 4, 0);
+
+                            if (send(sockfd, ss, size, 0) <= 0) {
+                                printf("send error\n");
+                            }
+
+                            break;                                        
+                        }
+                        case com::xum::proto::portal::MsgGetReq: {
+                            com::xum::proto::portal::GetRequest get_req;
+                            get_req.ParseFromArray(it->second.msg_recv_buffer, it->second.msg_len);
+
+                            // 根据key获取value
+                            std::map<std::string, std::string>::iterator kv_it = kv_map.find(get_req.key());
+                            // 如果没有找到
+                            if (kv_it == kv_map.end()) {
+                                // GetResponse 的协议需要完善，增加一个find 字段！
+                            } else {
+                                // 发送应答（这部分怎么封装、解耦）
+                                com::xum::proto::portal::GetResponse get_rsp;
+                                get_rsp.set_key(kv_it.first());
+                                get_rsp.set_value(kv_it.second());
+                               
+                                int size = get_rsp.ByteSize(); 
+                                char ss[size];
+                                get_rsp.SerializeToArray(ss, size);
+
+                                char int_buffer[sizeof(int32_t)];
+                                int32_t msg_type = htonl(com::xum::proto::portal::MsgGetRsp);
+                                memcpy(&int_buffer, &msg_type, sizeof(msg_type));
+                                send(sockfd, int_buffer, 4, 0);
+
+                                int32_t msg_len = htonl(size);
+                                memcpy(&int_buffer, &msg_len, sizeof(msg_len));
+                                
+                                send(sockfd, int_buffer, 4, 0);
+
+                                if (send(sockfd, ss, size, 0) <= 0) {
+                                    printf("send error\n");
+                                }
+                            }
+
+                            break;
+                        }
+                        default: {
+                                 
+                        }
+                    }
                     // 内存怎么释放？这里面有内存泄漏问题！
                     // msg_recv_buffer还没有释放
                     buffer_map.erase(it);
