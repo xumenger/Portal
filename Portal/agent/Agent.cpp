@@ -10,6 +10,10 @@
 
 #include "../protobuf/Portal.pb.h"
 
+
+void get_response(int connect_fd);
+void fork_worker(com::xum::proto::portal::GetResponse get_rsp);
+
 /**
  * 服务器上的代理节点
  * 监听Portal的消息
@@ -78,7 +82,7 @@ int main(int argc, char const *argv[])
         }
 
         // 接收应答（暂时只考虑阻塞的方式）
-        get_response(connect_fd);
+        get_response(sockfd);
 
         fork_worker(com::xum::proto::portal::GetResponse get_rsp);
 
@@ -137,10 +141,10 @@ void fork_worker(com::xum::proto::portal::GetResponse get_rsp) {
     // 直接fork 一个进程
     int childpid = fork();
     
-    if(childpid == 0){
-        printf("%d This is child process\n",childpid);
-    }else{
-        printf("This is parent process\n");}
+    if (childpid == 0) {
+        printf("%d This is child process\n", childpid);
+    } else {
+        printf("This is parent process\n");
     }
-    printf("%d step2 after fork()！！ \n\n",childpid);
+    printf("%d step2 after fork()！！ \n\n", childpid);
 }
