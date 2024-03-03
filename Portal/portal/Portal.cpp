@@ -285,10 +285,10 @@ void lt(epoll_event *events, int number, int epollfd, int listenfd)
                                 // 发送应答（这部分怎么封装、解耦）
                                 com::xum::proto::portal::GetResponse get_rsp;
                                 // error: no match for call to ‘(std::__cxx11::basic_string<char>) ()’
-                                // get_rsp.set_key(kv_it->first());
-                                // get_rsp.set_value(kv_it->second());
-                                get_rsp.set_key(kv_it->first().c_str());
-                                get_rsp.set_value(kv_it->second().c_str());
+                                get_rsp.set_key(kv_it->first());
+                                get_rsp.set_value(kv_it->second());
+                                // get_rsp.set_key(kv_it->first().c_str());
+                                // get_rsp.set_value(kv_it->second().c_str());
                                
                                 int size = get_rsp.ByteSize(); 
                                 char ss[size];
