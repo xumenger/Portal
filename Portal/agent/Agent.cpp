@@ -84,7 +84,7 @@ int main(int argc, char const *argv[])
         // 接收应答（暂时只考虑阻塞的方式）
         get_response(sockfd);
 
-        fork_worker(com::xum::proto::portal::GetResponse get_rsp);
+        fork_worker(get_rsp);
 
         // 接收Portal的调度指令：
         // 1. 启动Worker
