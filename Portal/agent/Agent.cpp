@@ -145,9 +145,9 @@ void fork_worker(com::xum::proto::portal::GetResponse get_rsp) {
     int childpid = fork();
     
     if (childpid == 0) {
-        printf("%d This is child process\n", childpid);
+        printf("%d This is child process\n\n", childpid);
     } else {
-        printf("This is parent process\n");
+        printf("This is parent process\n\n");
     }
     printf("%d step2 after fork()！！ \n\n", childpid);
 }
