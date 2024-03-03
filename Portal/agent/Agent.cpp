@@ -11,7 +11,7 @@
 #include "../protobuf/Portal.pb.h"
 
 
-void get_response(int connect_fd);
+com::xum::proto::portal::GetResponse get_response(int connect_fd);
 void fork_worker(com::xum::proto::portal::GetResponse get_rsp);
 
 /**
@@ -82,7 +82,8 @@ int main(int argc, char const *argv[])
         }
 
         // 接收应答（暂时只考虑阻塞的方式）
-        get_response(sockfd);
+        // 返回值的内存拷贝方式是什么，内存管理有风险
+        com::xum::proto::portal::GetResponse get_rsp = get_response(sockfd);
 
         fork_worker(get_rsp);
 
@@ -108,7 +109,7 @@ int main(int argc, char const *argv[])
 }
 
 
-void get_response(int connect_fd) {
+com::xum::proto::portal::GetResponse get_response(int connect_fd) {
     char int_buffer[sizeof(int32_t)];
 
     int32_t msg_type_temp;
@@ -131,6 +132,8 @@ void get_response(int connect_fd) {
     get_rsp.ParseFromArray(buffer, msg_len);
 
     std::cout << get_rsp.value() << std::endl;
+
+    return get_rsp;
 }
 
 
